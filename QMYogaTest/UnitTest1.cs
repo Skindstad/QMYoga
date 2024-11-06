@@ -13,7 +13,7 @@ namespace QMYogaTest
         public void Test1()
         {
             Item item = new Item();
-            item.Id = 10;
+            item.Id = 1;
             Assert.That(item.Id, Is.EqualTo(1));
         }
     }
