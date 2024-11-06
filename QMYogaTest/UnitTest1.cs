@@ -6,14 +6,14 @@ namespace QMYogaTest
         [SetUp]
         public void Setup()
         {
-           
+
         }
 
         [Test]
         public void Test1()
         {
             Item item = new Item();
-            item.Id = 1;
+            item.Id = 10;
             Assert.That(item.Id, Is.EqualTo(1));
         }
     }
