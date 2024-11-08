@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using QMYoga.Components;
+using QMYoga.Context;
 
 namespace QMYoga
 {
@@ -7,6 +9,11 @@ namespace QMYoga
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddDbContext<QMYogaContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("QMYogaContext"));
+            });
 
             // Add services to the container.
             builder.Services.AddRazorComponents()

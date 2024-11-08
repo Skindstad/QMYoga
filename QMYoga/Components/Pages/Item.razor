@@ -1,0 +1,33 @@
+﻿@page "/item"
+@rendermode InteractiveServer
+@using QMYoga.Context
+@using QMYoga.Models
+@inject QMYogaContext context
+
+<PageTitle>Item</PageTitle>
+
+<h1>Item</h1>
+
+<p role="status">Current count: @Counter</p>
+
+<button class="btn btn-primary" @onclick="CreateItem">Click me</button>
+
+<ol>
+    @foreach(var item in context.Items.OrderByDescending(i => i.Id).ToList())
+    {
+        <li>@item.Name</li>
+    }
+</ol>
+
+@code {
+    public int Counter {get;set;}
+    private void CreateItem()
+    {
+        context.Items.Add(new QMYoga.Models.Item
+        {
+            Name = "Item " + Counter
+        });
+        context.SaveChanges();
+        Counter++;
+    }
+}
