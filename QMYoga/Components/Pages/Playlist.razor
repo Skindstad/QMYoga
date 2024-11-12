@@ -1,0 +1,168 @@
+﻿@page "/Playlist"
+@inject IJSRuntime JSRuntime
+@using QMYoga.Models
+
+<link href="PlaylistStyle.css" rel="stylesheet" />
+
+
+<div class="split" style="margin-top: 1em;">
+    <div class="container">
+        <div>
+            <p style="font-weight: bold; color: #FFD700; font-size: 24px; text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);">Ny</p>
+        </div>
+        <div class="row">
+            <div class="col-6 col-md-4 col-lg-3">
+                <img src="https://www.ekhartyoga.com/media/image/articles/Laia_Bove_Mermaid-pose.jpg" alt="image" class="img-thumbnail">
+            </div>
+            <div class="col">
+                <div class="row">
+                    <h1>Nakke</h1>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <button class="btn btn-custom">Nakke</button>
+                    </div>
+                    <div class="col-3">
+                        <button class="btn btn-custom">Yoga</button>
+                    </div>
+                    <div class="col-3">
+                        <button class="btn btn-custom">Kick</button>
+                    </div>
+                    <div class="col-3">
+                        <button class="btn btn-custom">Punch</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3">
+                <img src="https://img.freepik.com/premium-vector/free-vector-padlock-icon-lock-locked_901408-572.jpg" alt="lock" class="img-thumbnail">
+            </div>
+        </div>
+
+        <!-- Collapsible Content (Text + Carousel) -->
+        <div class="row" id="collapsibleContent" style="display: none;">
+            <div class="col-12">
+                <p style="margin-top: 10%;">Lorem ipsum dolor sit amet...</p>
+            </div>
+
+            <div class="col-12 position-relative">
+                <div class="scroll-carousel" id="carouselContainer" style="margin-left: 6em;">
+                    @foreach (var image in Images)
+                    {
+                        <button>
+                            <div class="carousel-image"><img src="@image.Url" alt="@image.Name"></div>
+                        </button>
+                    }
+                </div>
+
+                <!-- Carousel Controls -->
+                <button class="carousel-control-prev position-absolute top-50 start-0 translate-middle-y" type="button" @onclick="() => ScrollCarousel(-1)">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next position-absolute top-50 end-0 translate-middle-y" type="button" @onclick="() => ScrollCarousel(1)">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Toggle Button -->
+        <div style="margin-left: 50%; margin-top: 20px;">
+            <button class="btn" @onclick="ToggleContent">Show</button>
+        </div>
+    </div>
+</div>
+<div class="split" style="margin-top: 1em;">
+    <div class="container">
+        <div>
+            <p style="font-weight: bold; color: #FFD700; font-size: 24px; text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);">Ny</p>
+        </div>
+        <div class="row">
+            <div class="col-6 col-md-4 col-lg-3">
+                <img src="https://www.ekhartyoga.com/media/image/articles/Laia_Bove_Mermaid-pose.jpg" alt="image" class="img-thumbnail">
+            </div>
+            <div class="col">
+                <div class="row">
+                    <h1>Nakke</h1>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <button class="btn btn-custom">Nakke</button>
+                    </div>
+                    <div class="col-3">
+                        <button class="btn btn-custom">Yoga</button>
+                    </div>
+                    <div class="col-3">
+                        <button class="btn btn-custom">Kick</button>
+                    </div>
+                    <div class="col-3">
+                        <button class="btn btn-custom">Punch</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3">
+                <img src="https://img.freepik.com/premium-vector/free-vector-padlock-icon-lock-locked_901408-572.jpg" alt="lock" class="img-thumbnail">
+            </div>
+        </div>
+
+        <!-- Collapsible Content (Text + Carousel) -->
+        <div class="row" id="collapsibleContent" style="display: none;">
+            <div class="col-12">
+                <p style="margin-top: 10%;">Lorem ipsum dolor sit amet...</p>
+            </div>
+
+            <div class="col-12 position-relative">
+                <div class="scroll-carousel" id="carouselContainer" style="margin-left: 6em;">
+                    @foreach (var image in Images)
+                    {
+                        <button>
+                            <div class="carousel-image"><img src="@image.Url" alt="@image.Name"></div>
+                        </button>
+                    }
+                </div>
+
+                <!-- Carousel Controls -->
+                <button class="carousel-control-prev position-absolute top-50 start-0 translate-middle-y" type="button" @onclick="() => ScrollCarousel(-1)">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next position-absolute top-50 end-0 translate-middle-y" type="button" @onclick="() => ScrollCarousel(1)">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Toggle Button -->
+        <div style="margin-left: 50%; margin-top: 20px;">
+            <button class="btn" @onclick="ToggleContent">Show</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    private bool isContentVisible = false;
+    private string toggleButtonText = "Show";
+    private List<Image> Images = new List<Image>
+    {
+        new Image { Url = "https://www.ekhartyoga.com/media/image/articles/Laia_Bove_Mermaid-pose.jpg", Name = "Image 1" },
+        new Image { Url = "https://eu.manduka.com/cdn/shop/articles/Manduka_1698x.png?v=1640096724", Name = "Image 2" },
+        new Image { Url = "https://trinehedegaard.dk/cdn/shop/articles/rolling_pandag_forfra_smil_forside_format.jpg?v=1588597029&width=2048", Name = "Image 3" },
+        new Image { Url = "https://yoga-amager.dk/wp-content/uploads/2022/01/IMG-2233-scaled.jpg", Name = "Image 4" },
+        new Image { Url = "https://res.cloudinary.com/peloton-cycle/image/fetch/c_fill,dpr_1.0,w_1024,h_768,x_1033,y_1313/f_auto/q_auto/https://images.ctfassets.net/6ilvqec50fal/4etuYztO7f1eMUnRn8e4Ia/62281f46a148c25651f09b8f8287ad0c/GettyImages-1223389038.jpg", Name = "Image 5" }
+        // Add more images as needed
+    };
+
+    private void ToggleContent()
+    {
+        isContentVisible = !isContentVisible;
+        toggleButtonText = isContentVisible ? "Hide" : "Show";
+
+        JSRuntime.InvokeVoidAsync("toggleContent", isContentVisible);
+    }
+
+    private void ScrollCarousel(int direction)
+    {
+        JSRuntime.InvokeVoidAsync("scrollCarousel", direction);
+    }
+}

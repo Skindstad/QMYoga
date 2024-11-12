@@ -1,0 +1,61 @@
+﻿.btn-custom {
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    font-weight: bold;
+}
+
+/* Color for odd buttons */
+.col-3:nth-of-type(odd) .btn-custom {
+    background-color: #b595a6;
+}
+
+/* Color for even buttons */
+.col-3:nth-of-type(even) .btn-custom {
+    background-color: #92aa9d;
+}
+
+.split {
+    padding: 10px 20px;
+    border: none;
+}
+
+    /* Color for odd buttons */
+    .split:nth-of-type(even) {
+        background-color: #FFFFFF;
+    }
+
+    /* Color for even buttons */
+    .split:nth-of-type(odd) {
+        background-color: #d1dbd6;
+    }
+
+.scroll-carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    white-space: nowrap;
+    width: calc(5 * 220px); /* 5 images, each 200px wide + 10px margin */
+}
+
+.carousel-image {
+    flex: 0 0 auto;
+    width: 200px;
+    height: 150px;
+    margin-right: 10px;
+}
+
+    .carousel-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+/* Carousel control buttons */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: black;
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+}
