@@ -1,0 +1,30 @@
+@page "/kategorier"
+
+<script>
+</script>
+
+<div class="category-container">
+    @foreach (var cat in Categories)
+    {
+        <div class="category">
+            <span class="category-title">@cat.Name</span>
+            <div class="subcategory-nav">
+                <button class="prev" onclick="prev(this)">🠈</button>
+                <div class="subcategory-container">
+                    <ul class="subcategory-list">
+                        @foreach (var sub in cat.SubCategories)
+                        {
+                            <a class="subcategory-link" href="@sub.Url">
+                                <div class="subcategory">
+                                    <span class="subcategory-title">@sub.Name</span>
+                                    <img class="subcategory-image" src="@sub.ImagePath" />
+                                </div>
+                            </a>
+                        }
+                    </ul>
+                </div>
+                <button class="next" onclick="next(this)">🠊</button>
+            </div>
+        </div>
+    }
+</div>
