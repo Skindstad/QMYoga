@@ -1,0 +1,158 @@
+﻿/* Container to hold the overlay effect */
+.image-overlay-container {
+    position: relative;
+    width: 100%;
+    max-width: 300px; /* Adjust max-width as desired */
+    aspect-ratio: 4 / 3; /* Ensures a consistent aspect ratio */
+}
+
+/* Base and overlay image styling */
+.base-image,
+.overlay-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Overlay image opacity */
+.overlay-image {
+    opacity: 0.8; /* Adjust transparency as desired */
+}
+
+.section-title {
+    font-weight: bold;
+    color: #FFD700;
+    font-size: 24px;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+}
+
+.playlist-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Custom button styling */
+.btn-custom {
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    font-weight: bold;
+    width: 100%;
+}
+
+/* Color for odd buttons */
+.button-group .col-6:nth-of-type(odd) .btn-custom {
+    background-color: #b595a6;
+}
+
+/* Color for even buttons */
+.button-group .col-6:nth-of-type(even) .btn-custom {
+    background-color: #92aa9d;
+}
+
+.split {
+    padding: 10px 20px;
+}
+
+    /* Split background colors */
+    .split:nth-of-type(even) {
+        background-color: #FFFFFF;
+    }
+
+    .split:nth-of-type(odd) {
+        background-color: #d1dbd6;
+    }
+
+/* Scroll carousel styles */
+.scroll-carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    white-space: nowrap;
+    padding: 10px 0;
+}
+
+/* Carousel image dimensions */
+.carousel-image {
+    flex: 0 0 auto;
+    margin-right: 10px;
+}
+
+    /* Standard image size for larger screens */
+    .carousel-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+/* Carousel control buttons */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: black;
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+}
+
+/* Mobile styling */
+@media (max-width: 576px) {
+    .carousel-image {
+        width: 100px;
+        height: 80px;
+    }
+
+    /* Show 2 images in the carousel */
+    .scroll-carousel {
+        width: calc(2 * 110px);
+    }
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+    .carousel-image {
+        width: 150px;
+        height: 100px;
+    }
+
+    /* Show 3 images in the carousel */
+    .scroll-carousel {
+        width: calc(3 * 160px);
+    }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+    .carousel-image {
+        width: 180px;
+        height: 120px;
+    }
+
+    /* Show 4 images in the carousel */
+    .scroll-carousel {
+        width: calc(4 * 190px);
+    }
+}
+
+@media (min-width: 992px) {
+    .carousel-image {
+        width: 200px;
+        height: 150px;
+    }
+
+    /* Show up to 5 images in the carousel */
+    .scroll-carousel {
+        width: calc(5 * 210px);
+    }
+}
+
+/* Responsive layout for title and description */
+@media (max-width: 576px) {
+    .description-text {
+        margin-top: 1em;
+    }
+
+    .btn-toggle {
+        width: 100%;
+    }
+}
