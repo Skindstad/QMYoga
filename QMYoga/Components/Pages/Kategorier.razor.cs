@@ -1,9 +1,14 @@
 using Microsoft.AspNetCore.Components;
+using QMYoga.Context;
+using QMYoga.Models;
 
 namespace QMYoga.Components.Pages
 {
     public partial class Kategorier : ComponentBase
     {
+        [Inject]
+        public QMYogaContext Context { get; set; }
+
         public List<Category> Categories { get; set; }
 
         public Kategorier()
@@ -106,19 +111,11 @@ namespace QMYoga.Components.Pages
                     ]
                 }
             ];
+
+            Context.Categories.AddRange(Categories.ToArray());
+            Context.SaveChanges();
+
         }
     }
 
-    public class Category
-    {
-        public string Name { get; set; }
-        public List<SubCategory> SubCategories { get; set; }
-    }
-
-    public class SubCategory
-    {
-        public string Name { get; set; }
-        public string Url { get; set; }
-        public string ImagePath { get; set; }
-    }
 }
