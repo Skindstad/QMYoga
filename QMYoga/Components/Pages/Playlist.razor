@@ -10,67 +10,75 @@
     <div class="split" style="margin-top: 1em;">
         <div class="container">
             <div>
-                <p style="font-weight: bold; color: #FFD700; font-size: 24px; text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);">Ny</p>
+                <p class="section-title">Ny</p>
             </div>
-            <div class="row">
-                <div class="col-6 col-md-4 col-lg-3">
-                    <img src="https://www.ekhartyoga.com/media/image/articles/Laia_Bove_Mermaid-pose.jpg" alt="image" class="img-thumbnail">
+            <div class="row align-items-center">
+                
+                <div class="col-6 col-md-4 col-lg-3 position-relative image-overlay-container">
+                <a href="#">
+                    <img src="https://www.ekhartyoga.com/media/image/articles/Laia_Bove_Mermaid-pose.jpg" alt="image" class="img-thumbnail base-image">
+                    <img src="https://img.freepik.com/premium-vector/free-vector-padlock-icon-lock-locked_901408-572.jpg" alt="lock" class="img-thumbnail overlay-image">
+                </a>
                 </div>
+
                 <div class="col">
                     <div class="row">
-                        <h1>@playlist.Name</h1>
+                        <h1 class="playlist-title">@playlist.Name</h1>
                     </div>
-                    <div class="row">
-                        <div class="col-3">
+                    <div class="row button-group">
+                        <div class="col-6 col-sm-6 col-md-3 mb-2">
                             <button class="btn btn-custom">Nakke</button>
                         </div>
-                        <div class="col-3">
+                        <div class="col-6 col-sm-6 col-md-3 mb-2">
                             <button class="btn btn-custom">Yoga</button>
                         </div>
-                        <div class="col-3">
+                        <div class="col-6 col-sm-6 col-md-3 mb-2">
                             <button class="btn btn-custom">Kick</button>
                         </div>
-                        <div class="col-3">
+                        <div class="col-6 col-sm-6 col-md-3 mb-2">
                             <button class="btn btn-custom">Punch</button>
                         </div>
                     </div>
                 </div>
-                <div class="col-6 col-md-4 col-lg-3">
-                    <img src="https://img.freepik.com/premium-vector/free-vector-padlock-icon-lock-locked_901408-572.jpg" alt="lock" class="img-thumbnail">
-                </div>
             </div>
 
             <!-- Collapsible Content (Text + Carousel) -->
-            <div class="row"  style="@GetDisplayStyle(playlist.IsVisible)" >
-                <div class="col-12">
-                    <p style="margin-top: 10%;">@playlist.Description</p>
+            <div class="row" style="@GetDisplayStyle(playlist.IsVisible)">
+                <div class="row">
+                <div class="col-md-4 col-sm-0"></div>
+                <div class="col-md-8 col-sm-12">
+                    <p class="description-text">@playlist.Description</p>
                 </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 position-relative">
+                        <div class="scroll-carousel d-flex" id="carouselContainer@(playlist.Id)">
+                            @foreach (var image in Images)
+                            {
+                                <a href="#">
+                                    <div class="carousel-image">
+                                        <img src="@image.Url" alt="@image.Name">
+                                    </div>
+                                </a>
+                            }
+                        </div>
 
-                <div class="col-12 position-relative">
-                    <div class="scroll-carousel" id="carouselContainer" style="margin-left: 6em;">
-                        @foreach (var image in Images)
-                        {
-                            <button>
-                                <div class="carousel-image"><img src="@image.Url" alt="@image.Name"></div>
-                            </button>
-                        }
+                        <!-- Carousel Controls -->
+                        <button class="carousel-control-prev" type="button" @onclick="() => ScrollCarousel(-1, playlist.Id)">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" @onclick="() => ScrollCarousel(1, playlist.Id)">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
                     </div>
-
-                    <!-- Carousel Controls -->
-                    <button class="carousel-control-prev position-absolute top-50 start-0 translate-middle-y" type="button" @onclick="() => ScrollCarousel(-1, playlist.Id)">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next position-absolute top-50 end-0 translate-middle-y" type="button" @onclick="() => ScrollCarousel(1, playlist.Id)">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
                 </div>
             </div>
 
             <!-- Toggle Button -->
-            <div style="margin-left: 50%; margin-top: 20px;">
-                <button class="btn" @onclick="() => ToggleContent(playlist.Id)">Show</button>
+            <div class="text-center mt-4">
+                <button class="btn btn-toggle" @onclick="() => ToggleContent(playlist.Id)">Show</button>
             </div>
         </div>
     </div>
@@ -95,8 +103,8 @@
 
     private List<Models.Playlist> playlists = new List<Models.Playlist>
     {
-        new Models.Playlist { Name = "Nakke", Description = "Lorem ipsum dolor sit amet...", Id = 1},
-        new Models.Playlist { Name = "Nakke", Description = "Lorem ipsum dolor sit amet...", Id = 2},
+        new Models.Playlist { Name = "Nakke", Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non dolor elit. Ut congue odio quis facilisis ultrices. Etiam ac magna varius, aliquet elit at, porta lorem. Morbi et tempor libero. Integer mi sapien, commodo nec arcu ut, auctor eleifend massa. Nunc urna nisi, mollis in tortor vel, interdum venenatis elit. Aenean gravida venenatis nisl, ac condimentum quam cursus id. Aliquam sed luctus urna, vel condimentum mi. Integer ipsum est, commodo ac metus vitae, condimentum varius massa. Aenean viverra, lectus vitae rutrum porttitor, eros sem pellentesque nulla, eget lobortis justo est non erat. Quisque ornare sed nisi vel fringilla. Praesent ultrices ipsum justo, sed tristique sem pulvinar quis. Nullam pretium viverra diam. Proin finibus metus nulla, eget vestibulum tortor interdum et. ", Id = 1},
+        new Models.Playlist { Name = "Nakke", Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non dolor elit. Ut congue odio quis facilisis ultrices. Etiam ac magna varius, aliquet elit at, porta lorem. Morbi et tempor libero. Integer mi sapien, commodo nec arcu ut, auctor eleifend massa. Nunc urna nisi, mollis in tortor vel, interdum venenatis elit. Aenean gravida venenatis nisl, ac condimentum quam cursus id. Aliquam sed luctus urna, vel condimentum mi. Integer ipsum est, commodo ac metus vitae, condimentum varius massa. Aenean viverra, lectus vitae rutrum porttitor, eros sem pellentesque nulla, eget lobortis justo est non erat. Quisque ornare sed nisi vel fringilla. Praesent ultrices ipsum justo, sed tristique sem pulvinar quis. Nullam pretium viverra diam. Proin finibus metus nulla, eget vestibulum tortor interdum et. ", Id = 2},
         new Models.Playlist { Name = "Nakke", Description = "Lorem ipsum dolor sit amet...", Id = 3},
         new Models.Playlist { Name = "Nakke", Description = "Lorem ipsum dolor sit amet...", Id = 4},
         new Models.Playlist { Name = "Nakke", Description = "Lorem ipsum dolor sit amet...", Id = 5},
@@ -123,6 +131,6 @@
 
     private void ScrollCarousel(int direction, int id)
     {
-        JSRuntime.InvokeVoidAsync("scrollCarousel", direction);
+        JSRuntime.InvokeVoidAsync("scrollCarousel", direction, id);
     }
 }
