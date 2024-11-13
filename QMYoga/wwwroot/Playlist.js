@@ -1,12 +1,4 @@
 ﻿
-    function toggleContent(isVisible) {
-            const collapsibleContent = document.getElementById("collapsibleContent");
-    if (isVisible) {
-        collapsibleContent.style.display = "block";
-            } else {
-        collapsibleContent.style.display = "none";
-            }
-        }
 
     function scrollCarousel(direction) {
             const carouselContainer = document.getElementById('carouselContainer');
