@@ -2,10 +2,11 @@
 @rendermode InteractiveServer
 @inject IJSRuntime JSRuntime
 @using QMYoga.Models
+@using QMYoga.Context
 
 <link href="PlaylistStyle.css" rel="stylesheet" />
 
-@foreach (var playlist in playlists)
+@foreach (var playlist in _Playlists)
 {
     <div class="split" style="margin-top: 1em;">
         <div class="container">
@@ -87,36 +88,45 @@
 @code {
     private bool isContentVisible = false;
     private string toggleButtonText = "Show";
-    private List<Image> Images = new List<Image>
+    private List<Video> Images = new List<Video>
     {
-        new Image { Url = "https://www.ekhartyoga.com/media/image/articles/Laia_Bove_Mermaid-pose.jpg", Name = "Image 1" },
-        new Image { Url = "https://eu.manduka.com/cdn/shop/articles/Manduka_1698x.png?v=1640096724", Name = "Image 2" },
-        new Image { Url = "https://trinehedegaard.dk/cdn/shop/articles/rolling_pandag_forfra_smil_forside_format.jpg?v=1588597029&width=2048", Name = "Image 3" },
-        new Image { Url = "https://yoga-amager.dk/wp-content/uploads/2022/01/IMG-2233-scaled.jpg", Name = "Image 4" },
-        new Image { Url = "https://yoga-amager.dk/wp-content/uploads/2022/01/IMG-2233-scaled.jpg", Name = "Image 4" },
-        new Image { Url = "https://yoga-amager.dk/wp-content/uploads/2022/01/IMG-2233-scaled.jpg", Name = "Image 4" },
-        new Image { Url = "https://yoga-amager.dk/wp-content/uploads/2022/01/IMG-2233-scaled.jpg", Name = "Image 4" },
-        new Image { Url = "https://yoga-amager.dk/wp-content/uploads/2022/01/IMG-2233-scaled.jpg", Name = "Image 4" },
-        new Image { Url = "https://res.cloudinary.com/peloton-cycle/image/fetch/c_fill,dpr_1.0,w_1024,h_768,x_1033,y_1313/f_auto/q_auto/https://images.ctfassets.net/6ilvqec50fal/4etuYztO7f1eMUnRn8e4Ia/62281f46a148c25651f09b8f8287ad0c/GettyImages-1223389038.jpg", Name = "Image 5" }
+        new Video { Url = "https://www.ekhartyoga.com/media/image/articles/Laia_Bove_Mermaid-pose.jpg", Name = "Image 1" },
+        new Video { Url = "https://eu.manduka.com/cdn/shop/articles/Manduka_1698x.png?v=1640096724", Name = "Image 2" },
+        new Video { Url = "https://trinehedegaard.dk/cdn/shop/articles/rolling_pandag_forfra_smil_forside_format.jpg?v=1588597029&width=2048", Name = "Image 3" },
+        new Video { Url = "https://yoga-amager.dk/wp-content/uploads/2022/01/IMG-2233-scaled.jpg", Name = "Image 4" },
+        new Video { Url = "https://yoga-amager.dk/wp-content/uploads/2022/01/IMG-2233-scaled.jpg", Name = "Image 4" },
+        new Video { Url = "https://yoga-amager.dk/wp-content/uploads/2022/01/IMG-2233-scaled.jpg", Name = "Image 4" },
+        new Video { Url = "https://yoga-amager.dk/wp-content/uploads/2022/01/IMG-2233-scaled.jpg", Name = "Image 4" },
+        new Video { Url = "https://yoga-amager.dk/wp-content/uploads/2022/01/IMG-2233-scaled.jpg", Name = "Image 4" },
+        new Video { Url = "https://res.cloudinary.com/peloton-cycle/image/fetch/c_fill,dpr_1.0,w_1024,h_768,x_1033,y_1313/f_auto/q_auto/https://images.ctfassets.net/6ilvqec50fal/4etuYztO7f1eMUnRn8e4Ia/62281f46a148c25651f09b8f8287ad0c/GettyImages-1223389038.jpg", Name = "Image 5" }
         // Add more images as needed
     };
+    [Inject]
+    public QMYogaContext Context { get; set; }
 
-    private List<Models.Playlist> playlists = new List<Models.Playlist>
+    public List<Models.Playlist> _Playlists { get; set; }
+
+
+    protected override void OnInitialized()
     {
-        new Models.Playlist { Name = "Nakke", Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non dolor elit. Ut congue odio quis facilisis ultrices. Etiam ac magna varius, aliquet elit at, porta lorem. Morbi et tempor libero. Integer mi sapien, commodo nec arcu ut, auctor eleifend massa. Nunc urna nisi, mollis in tortor vel, interdum venenatis elit. Aenean gravida venenatis nisl, ac condimentum quam cursus id. Aliquam sed luctus urna, vel condimentum mi. Integer ipsum est, commodo ac metus vitae, condimentum varius massa. Aenean viverra, lectus vitae rutrum porttitor, eros sem pellentesque nulla, eget lobortis justo est non erat. Quisque ornare sed nisi vel fringilla. Praesent ultrices ipsum justo, sed tristique sem pulvinar quis. Nullam pretium viverra diam. Proin finibus metus nulla, eget vestibulum tortor interdum et. ", Id = 1},
-        new Models.Playlist { Name = "Nakke", Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non dolor elit. Ut congue odio quis facilisis ultrices. Etiam ac magna varius, aliquet elit at, porta lorem. Morbi et tempor libero. Integer mi sapien, commodo nec arcu ut, auctor eleifend massa. Nunc urna nisi, mollis in tortor vel, interdum venenatis elit. Aenean gravida venenatis nisl, ac condimentum quam cursus id. Aliquam sed luctus urna, vel condimentum mi. Integer ipsum est, commodo ac metus vitae, condimentum varius massa. Aenean viverra, lectus vitae rutrum porttitor, eros sem pellentesque nulla, eget lobortis justo est non erat. Quisque ornare sed nisi vel fringilla. Praesent ultrices ipsum justo, sed tristique sem pulvinar quis. Nullam pretium viverra diam. Proin finibus metus nulla, eget vestibulum tortor interdum et. ", Id = 2},
-        new Models.Playlist { Name = "Nakke", Description = "Lorem ipsum dolor sit amet...", Id = 3},
-        new Models.Playlist { Name = "Nakke", Description = "Lorem ipsum dolor sit amet...", Id = 4},
-        new Models.Playlist { Name = "Nakke", Description = "Lorem ipsum dolor sit amet...", Id = 5},
-    };
+        //ReplaceData();
+        _Playlists = Context.Playlists.ToList();
+    }
 
 
-
+    // private List<Models.Playlist> playlists = new List<Models.Playlist>
+    // {
+    //     new Models.Playlist { Name = "Nakke", Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non dolor elit. Ut congue odio quis facilisis ultrices. Etiam ac magna varius, aliquet elit at, porta lorem. Morbi et tempor libero. Integer mi sapien, commodo nec arcu ut, auctor eleifend massa. Nunc urna nisi, mollis in tortor vel, interdum venenatis elit. Aenean gravida venenatis nisl, ac condimentum quam cursus id. Aliquam sed luctus urna, vel condimentum mi. Integer ipsum est, commodo ac metus vitae, condimentum varius massa. Aenean viverra, lectus vitae rutrum porttitor, eros sem pellentesque nulla, eget lobortis justo est non erat. Quisque ornare sed nisi vel fringilla. Praesent ultrices ipsum justo, sed tristique sem pulvinar quis. Nullam pretium viverra diam. Proin finibus metus nulla, eget vestibulum tortor interdum et. ", Id = 1},
+    //     new Models.Playlist { Name = "Nakke", Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non dolor elit. Ut congue odio quis facilisis ultrices. Etiam ac magna varius, aliquet elit at, porta lorem. Morbi et tempor libero. Integer mi sapien, commodo nec arcu ut, auctor eleifend massa. Nunc urna nisi, mollis in tortor vel, interdum venenatis elit. Aenean gravida venenatis nisl, ac condimentum quam cursus id. Aliquam sed luctus urna, vel condimentum mi. Integer ipsum est, commodo ac metus vitae, condimentum varius massa. Aenean viverra, lectus vitae rutrum porttitor, eros sem pellentesque nulla, eget lobortis justo est non erat. Quisque ornare sed nisi vel fringilla. Praesent ultrices ipsum justo, sed tristique sem pulvinar quis. Nullam pretium viverra diam. Proin finibus metus nulla, eget vestibulum tortor interdum et. ", Id = 2},
+    //     new Models.Playlist { Name = "Nakke", Description = "Lorem ipsum dolor sit amet...", Id = 3},
+    //     new Models.Playlist { Name = "Nakke", Description = "Lorem ipsum dolor sit amet...", Id = 4},
+    //     new Models.Playlist { Name = "Nakke", Description = "Lorem ipsum dolor sit amet...", Id = 5},
+    // };
 
 
     private void ToggleContent(int id)
     {
-        var playlist = playlists.FirstOrDefault(s => s.Id == id);
+        var playlist = _Playlists.FirstOrDefault(s => s.Id == id);
         if (playlist != null)
         {
             playlist.IsVisible = !playlist.IsVisible;

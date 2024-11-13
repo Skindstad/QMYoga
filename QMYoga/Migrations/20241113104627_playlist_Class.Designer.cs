@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QMYoga.Context;
 
@@ -11,9 +12,11 @@ using QMYoga.Context;
 namespace QMYoga.Migrations
 {
     [DbContext(typeof(QMYogaContext))]
-    partial class QMYogaContextModelSnapshot : ModelSnapshot
+    [Migration("20241113104627_playlist_Class")]
+    partial class playlist_Class
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,32 +128,20 @@ namespace QMYoga.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan>("Duration")
-                        .HasColumnType("time");
-
-                    b.Property<int>("PlayListID")
+                    b.Property<int?>("PlaylistId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<DateTime>("UploadDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Url")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Videos");
+                    b.HasIndex("PlaylistId");
+
+                    b.ToTable("Video");
                 });
 
             modelBuilder.Entity("QMYoga.Models.SubCategory", b =>
@@ -164,9 +155,21 @@ namespace QMYoga.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("QMYoga.Models.Video", b =>
+                {
+                    b.HasOne("QMYoga.Models.Playlist", null)
+                        .WithMany("Videos")
+                        .HasForeignKey("PlaylistId");
+                });
+
             modelBuilder.Entity("QMYoga.Models.Category", b =>
                 {
                     b.Navigation("SubCategories");
+                });
+
+            modelBuilder.Entity("QMYoga.Models.Playlist", b =>
+                {
+                    b.Navigation("Videos");
                 });
 #pragma warning restore 612, 618
         }
