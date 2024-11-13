@@ -5,12 +5,12 @@ using QMYoga.Models;
 
 namespace QMYoga.Components.Pages
 {
-    public partial class Kategorier : ComponentBase
+    public partial class Categories : ComponentBase
     {
         [Inject]
         public QMYogaContext Context { get; set; }
 
-        public List<Category> Categories { get; set; }
+        public List<Category> _Categories { get; set; }
 
         private void ReplaceData()
         {
@@ -136,7 +136,7 @@ namespace QMYoga.Components.Pages
         protected override void OnInitialized()
         {
             //ReplaceData();
-            Categories = Context.Categories.Include(static c => c.SubCategories).ToList();
+            _Categories = Context.Categories.Include(static c => c.SubCategories).ToList();
         }
     }
 
