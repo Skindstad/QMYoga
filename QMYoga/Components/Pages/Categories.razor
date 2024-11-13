@@ -1,13 +1,10 @@
-@page "/kategorier"
-
-<script>
-</script>
+@page "/categories"
 
 <div class="category-container">
     @foreach (var cat in Categories)
     {
         <div class="category">
-            <span class="category-title">@cat.Name</span>
+            <span class="category-title">@cat.Title</span>
             <div class="subcategory-nav">
                 <button class="prev" onclick="prev(this)">🠈</button>
                 <div class="subcategory-container">
@@ -16,7 +13,7 @@
                         {
                             <a class="subcategory-link" href="@sub.Url">
                                 <div class="subcategory">
-                                    <span class="subcategory-title">@sub.Name</span>
+                                    <span class="subcategory-title">@sub.Title</span>
                                     <img class="subcategory-image" src="@sub.ImagePath" />
                                 </div>
                             </a>

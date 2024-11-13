@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QMYoga.Context;
 
@@ -10,9 +11,11 @@ using QMYoga.Context;
 namespace QMYoga.Migrations
 {
     [DbContext(typeof(QMYogaContext))]
-    partial class QMYogaContextModelSnapshot : ModelSnapshot
+    [Migration("20241113080435_subcat_url")]
+    partial class subcat_url
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
