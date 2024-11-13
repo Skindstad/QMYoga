@@ -8,5 +8,6 @@ namespace QMYoga.Context
         public DbSet<Item> Items { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Playlist> Playlists { get; set; }
     }
 }
