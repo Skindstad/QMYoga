@@ -135,7 +135,7 @@ namespace QMYoga.Components.Pages
 
         protected override void OnInitialized()
         {
-            //ReplaceData();
+            ReplaceData();
             _Categories = Context.Categories.Include(static c => c.SubCategories).ToList();
         }
     }
