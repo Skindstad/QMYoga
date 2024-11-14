@@ -27,5 +27,6 @@ namespace QMYoga.Models
         public DateTime UploadDate { get; set; } // The date the video was uploaded
         
         public int PlayListID { get; set; } // Sets an id to a playlist ID, is null if not part of a list
+        public ICollection<Tag> Tags { get; set; } = new List<Tag>();
     }
 }

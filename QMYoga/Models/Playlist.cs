@@ -9,6 +9,7 @@
         public bool IsVisible { get; set; } = false;
         public string Image {get; set; }
         public ICollection<Video> Videos { get; set; } = new List<Video>();
+        public SubCategory SubCategory { get; set; }
 
     }
 }
