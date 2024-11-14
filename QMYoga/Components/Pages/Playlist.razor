@@ -7,6 +7,8 @@
 @using Microsoft.EntityFrameworkCore
 <link href="PlaylistStyle.css" rel="stylesheet" />
 
+<SearchBar DefaultSelectedTags=@SearchTags/>
+
 @foreach (var playlist in _Playlists)
 {
     <div class="split" style="margin-top: 1em;">
@@ -87,6 +89,12 @@
 }
 
 @code {
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "tags")]
+    public string? SearchTagsString { get; set; }
+
+    private List<QMYoga.Components.SearchBar.Tag> SearchTags {get;set;} = [];
+
     private bool isContentVisible = false;
     private string toggleButtonText = "Show";
     [Inject]
@@ -119,5 +127,16 @@
     private void ScrollCarousel(int direction, int id)
     {
         JSRuntime.InvokeVoidAsync("scrollCarousel", direction, id);
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (SearchTagsString is not null) {
+            Console.WriteLine(SearchTagsString);
+            SearchTags = SearchTagsString
+                .Split("|||")
+                .Select(text => new QMYoga.Components.SearchBar.Tag{Text = text})
+                .ToList();
+        }
     }
 }
