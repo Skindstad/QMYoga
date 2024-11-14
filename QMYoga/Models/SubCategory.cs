@@ -7,4 +7,5 @@ public class SubCategory
     public string ImagePath { get; set; }
     public string Url { get; set; }
     public Category Category { get; set; }
+    public ICollection<Playlist> Playlists { get; set; } = new List<Playlist>();
 }

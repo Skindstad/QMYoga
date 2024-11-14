@@ -12,6 +12,7 @@ namespace QMYoga.Context
         public DbSet<Video> Videos { get; set; }
 
         public DbSet<Playlist> Playlists { get; set; }
+        public DbSet<Tag> Tags { get; set; }
 
     }
 }

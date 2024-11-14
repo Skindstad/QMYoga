@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QMYoga.Context;
 
@@ -11,9 +12,11 @@ using QMYoga.Context;
 namespace QMYoga.Migrations
 {
     [DbContext(typeof(QMYogaContext))]
-    partial class QMYogaContextModelSnapshot : ModelSnapshot
+    [Migration("20241114073700_videoWithTags")]
+    partial class videoWithTags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,12 +85,7 @@ namespace QMYoga.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SubCategoryId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("SubCategoryId");
 
                     b.ToTable("Playlists");
                 });
@@ -182,17 +180,6 @@ namespace QMYoga.Migrations
                     b.ToTable("Videos");
                 });
 
-            modelBuilder.Entity("QMYoga.Models.Playlist", b =>
-                {
-                    b.HasOne("QMYoga.Models.SubCategory", "SubCategory")
-                        .WithMany("Playlists")
-                        .HasForeignKey("SubCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SubCategory");
-                });
-
             modelBuilder.Entity("QMYoga.Models.SubCategory", b =>
                 {
                     b.HasOne("QMYoga.Models.Category", "Category")
@@ -228,11 +215,6 @@ namespace QMYoga.Migrations
             modelBuilder.Entity("QMYoga.Models.Playlist", b =>
                 {
                     b.Navigation("Videos");
-                });
-
-            modelBuilder.Entity("QMYoga.Models.SubCategory", b =>
-                {
-                    b.Navigation("Playlists");
                 });
 
             modelBuilder.Entity("QMYoga.Models.Video", b =>
