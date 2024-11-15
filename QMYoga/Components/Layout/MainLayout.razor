@@ -4,18 +4,19 @@
 <div class="page">
 
     <main>
-        <div class="top-row px-4">
-            <img src="images/YogaLogo.png" style="width: 64px; height: 58px; padding-right: 10px;" />
-            <a href="https://learn.microsoft.com/aspnet/core/">Abonnement</a>
-            <select name="Kategorier" onchange="redirectToCategory(this)">
-                <option >Select Guide</option>
+        <div class="header">
+            <a href="/">
+                <img class="logo" src="images/YogaLogo.png" />
+            </a>
+            <div class="spacer"></div>
+            <a class="item" href="https://learn.microsoft.com/aspnet/core/">Abonnement</a>
+            <a class="item" href="categories">Mediefiler</a>
+            <select class="item" name="Profil" onchange="redirectToCategory(this)">
+                <option >Profil</option>
                 <option value="https://learn.microsoft.com/aspnet/core/">Yoga</option>
-                <option value="https://learn.microsoft.com/aspnet/core/">Meditation</option>
-                <option value="https://learn.microsoft.com/aspnet/core/">Åndedræts</option>
             </select>
-            <a>Profile</a>
-            <button @onclick="onButtonClick" style="width: 100px; height: 50px;">@buttonLable</button>
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            <button class="item" @onclick="onButtonClick">@buttonLable</button>
+            <a class="item" href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
         </div>
 
         <article class="content px-4">

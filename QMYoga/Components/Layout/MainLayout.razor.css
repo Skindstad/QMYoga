@@ -6,6 +6,44 @@
     flex-direction: column;
 }
 
+.header {
+    display: flex;
+    flex-flow: row nowrap;
+    margin: 0;
+    background: #eee;
+    align-items: stretch;
+}
+
+.header > .item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: none;
+    background: none;
+    min-width: 5rem;
+    padding: 0 1rem;
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+}
+
+.header > .item:hover {
+    background: white;
+}
+
+.logo {
+    height: 5rem;
+    padding: 0.5rem;
+    min-width: 0;
+    cursor: pointer;
+}
+
+.spacer {
+    flex: 1;
+    border: none;
+}
+
 main {
     flex: 1;
     min-width: 0;

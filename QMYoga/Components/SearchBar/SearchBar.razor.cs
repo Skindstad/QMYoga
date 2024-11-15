@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Components;
+using QMYoga.Context;
+using QMYoga.Models;
 
 namespace QMYoga.Components.SearchBar
 {
@@ -6,6 +8,9 @@ namespace QMYoga.Components.SearchBar
     {
         [Inject]
         public NavigationManager NavigationManager { get; set; }
+
+        [Inject]
+        public QMYogaContext Context { get; set; }
 
         public List<Tag> AllTags { get; set; } = [];
 
@@ -27,48 +32,34 @@ namespace QMYoga.Components.SearchBar
 
         protected override void OnInitialized()
         {
-            AllTags = new List<Tag>()
-            {
-                new Tag
-                {
-                    Text = "Tag 1"
-                },
-                new Tag
-                {
-                    Text = "Tag 2"
-                },
-                new Tag
-                {
-                    Text = "Tag 3"
-                },
-                new Tag
-                {
-                    Text = "qwe,sad, reg ?¤#"
-                },
-                new Tag
-                {
-                    Text = "Tag 5"
-                }
-            };
+            base.OnInitialized();
+
+            AllTags = Context.Tags.OrderBy(static t => t.Name).ToList();
 
             foreach (Tag tag in DefaultSelectedTags)
             {
-                Tag? foundTag = AllTags.FirstOrDefault(t => t.Text == tag.Text);
+                Tag? foundTag = AllTags.FirstOrDefault(t => t.Name == tag.Name);
                 if (foundTag is not null)
                 {
                     SelectedTags.Add(foundTag);
                 }
                 else
                 {
-                    Console.WriteLine("Tag not found: " + tag.Text);
+                    Console.WriteLine("Tag not found: " + tag.Name);
                 }
             }
         }
 
         public void Search()
         {
+            if (SelectedTags.Count == 0)
+            {
+                NavigationManager.NavigateTo("/Playlist", true);
+                return;
+            }
+
             string queryString = SelectedTags
-                .Select(static t => Uri.EscapeDataString(t.Text))
+                .Select(static t => Uri.EscapeDataString(t.Name))
                 .Aggregate(static (a, b) => a + "|||" + b);
 
             NavigationManager.NavigateTo("/Playlist?tags=" + queryString, true);
@@ -108,10 +99,5 @@ namespace QMYoga.Components.SearchBar
         {
             return SelectedTags.Contains(tag);
         }
-    }
-
-    public class Tag
-    {
-        public string Text { get; set; }
     }
 }

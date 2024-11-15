@@ -7,7 +7,7 @@
 
             @foreach (var tag in AllTags) {
                 <div class="list-item @(IsSelected(tag) ? "selected" : "")" @onclick="() => ToggleTag(tag)">
-                    <span>@tag.Text</span>
+                    <span>@tag.Name</span>
                 </div>
             }
         </div>
@@ -17,7 +17,7 @@
         @foreach (var tag in SelectedTags) {
             <div class="tag" @onclick="() => RemoveTag(tag)">
                 <span class="cross">X</span>
-                <span>@tag.Text</span>
+                <span>@tag.Name</span>
             </div>
         }
     </div>
