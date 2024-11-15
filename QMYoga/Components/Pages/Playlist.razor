@@ -19,7 +19,7 @@
             <div class="row align-items-center">
                 
                 <div class="col-6 col-md-4 col-lg-3 position-relative image-overlay-container">
-                <a href="#">
+                <a href="videoplayer?playlistid=@playlist.Id">
                     <img src="https://www.ekhartyoga.com/media/image/articles/Laia_Bove_Mermaid-pose.jpg" alt="image" class="img-thumbnail base-image">
                     <img src="https://img.freepik.com/premium-vector/free-vector-padlock-icon-lock-locked_901408-572.jpg" alt="lock" class="img-thumbnail overlay-image">
                 </a>
@@ -30,18 +30,12 @@
                         <h1 class="playlist-title">@playlist.Name</h1>
                     </div>
                     <div class="row button-group">
-                        <div class="col-6 col-sm-6 col-md-3 mb-2">
-                            <button class="btn btn-custom">Nakke</button>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-3 mb-2">
-                            <button class="btn btn-custom">Yoga</button>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-3 mb-2">
-                            <button class="btn btn-custom">Kick</button>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-3 mb-2">
-                            <button class="btn btn-custom">Punch</button>
-                        </div>
+                        @foreach (var tag in playlist.Tags)
+                        {
+                            <div class="col-6 col-sm-6 col-md-3 mb-2">
+                                <button class="btn btn-custom">@tag.Name</button>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -59,9 +53,9 @@
                         <div class="scroll-carousel d-flex" id="carouselContainer@(playlist.Id)">
                             @foreach (var video in playlist.Videos)
                             {
-                                <a href="#">
+                                <a href="videoplayer?playlistid=@playlist.Id&videoid=@video.Id">
                                     <div class="carousel-image">
-                                        <img src="@video.Url" alt="@video.Title">
+                                        <img src="@video.Thumbnail" alt="@video.Title">
                                     </div>
                                 </a>
                             }
@@ -90,13 +84,18 @@
 
 @code {
     [Parameter]
+    [SupplyParameterFromQuery(Name = "subcategory")]
+    public int? SubCategoryId { get; set; }
+
+    [Parameter]
     [SupplyParameterFromQuery(Name = "tags")]
     public string? SearchTagsString { get; set; }
 
-    private List<QMYoga.Components.SearchBar.Tag> SearchTags {get;set;} = [];
+    private List<Tag> SearchTags {get;set;} = [];
 
     private bool isContentVisible = false;
     private string toggleButtonText = "Show";
+
     [Inject]
     public QMYogaContext Context { get; set; }
 
@@ -105,8 +104,24 @@
 
     protected override void OnInitialized()
     {
-        //ReplaceData();
-        _Playlists = Context.Playlists.Include(x => x.Videos).ToList();
+        _Playlists = Context.Playlists
+            .Include(x => x.Videos)
+            .ThenInclude(x => x.Tags)
+            .Include(x => x.SubCategory)
+            .ToList();
+
+        foreach (var pl in _Playlists)
+        {
+            pl.Tags = pl.Videos.SelectMany(x => x.Tags).Distinct().ToList();
+        }
+
+        if (SubCategoryId is not null)
+        {
+            _Playlists = _Playlists
+                .Where(x => x.SubCategory.Id == SubCategoryId)
+                .ToList();
+        }
+
     }
 
     private void ToggleContent(int id)
@@ -132,10 +147,16 @@
     protected override void OnParametersSet()
     {
         if (SearchTagsString is not null) {
-            Console.WriteLine(SearchTagsString);
             SearchTags = SearchTagsString
                 .Split("|||")
-                .Select(text => new QMYoga.Components.SearchBar.Tag{Text = text})
+                .Select(text => new Tag{Name = text})
+                .ToList();
+        }
+
+        if (SearchTags.Count != 0)
+        {
+            _Playlists = _Playlists
+                .Where(x => SearchTags.All(tag => x.Tags.Any(t => t.Name == tag.Name)))
                 .ToList();
         }
     }

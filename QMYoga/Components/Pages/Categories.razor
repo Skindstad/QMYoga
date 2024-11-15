@@ -12,7 +12,7 @@
                     <ul class="subcategory-list">
                         @foreach (var sub in cat.SubCategories)
                         {
-                            <a class="subcategory-link" href="@sub.Url">
+                            <a class="subcategory-link" href="Playlist?subcategory=@sub.Id">
                                 <div class="subcategory">
                                     <span class="subcategory-title">@sub.Title</span>
                                     <img class="subcategory-image" src="@sub.ImagePath" />

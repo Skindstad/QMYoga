@@ -134,12 +134,7 @@ namespace QMYoga.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("VideoId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("VideoId");
 
                     b.ToTable("Tags");
                 });
@@ -160,8 +155,12 @@ namespace QMYoga.Migrations
                     b.Property<TimeSpan>("Duration")
                         .HasColumnType("time");
 
-                    b.Property<int>("PlayListID")
+                    b.Property<int?>("PlayListId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Thumbnail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -177,9 +176,24 @@ namespace QMYoga.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PlayListID");
+                    b.HasIndex("PlayListId");
 
                     b.ToTable("Videos");
+                });
+
+            modelBuilder.Entity("TagVideo", b =>
+                {
+                    b.Property<int>("TagsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VideosId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TagsId", "VideosId");
+
+                    b.HasIndex("VideosId");
+
+                    b.ToTable("TagVideo");
                 });
 
             modelBuilder.Entity("QMYoga.Models.Playlist", b =>
@@ -204,18 +218,26 @@ namespace QMYoga.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("QMYoga.Models.Tag", b =>
-                {
-                    b.HasOne("QMYoga.Models.Video", null)
-                        .WithMany("Tags")
-                        .HasForeignKey("VideoId");
-                });
-
             modelBuilder.Entity("QMYoga.Models.Video", b =>
                 {
-                    b.HasOne("QMYoga.Models.Playlist", null)
+                    b.HasOne("QMYoga.Models.Playlist", "PlayList")
                         .WithMany("Videos")
-                        .HasForeignKey("PlayListID")
+                        .HasForeignKey("PlayListId");
+
+                    b.Navigation("PlayList");
+                });
+
+            modelBuilder.Entity("TagVideo", b =>
+                {
+                    b.HasOne("QMYoga.Models.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QMYoga.Models.Video", null)
+                        .WithMany()
+                        .HasForeignKey("VideosId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -233,11 +255,6 @@ namespace QMYoga.Migrations
             modelBuilder.Entity("QMYoga.Models.SubCategory", b =>
                 {
                     b.Navigation("Playlists");
-                });
-
-            modelBuilder.Entity("QMYoga.Models.Video", b =>
-                {
-                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }

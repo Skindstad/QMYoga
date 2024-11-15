@@ -15,11 +15,19 @@ namespace QMYoga
                 options.UseSqlServer(builder.Configuration.GetConnectionString("QMYogaContext"));
             });
 
+            builder.Services.AddTransient<DbSeeder>();
+
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbSeeder = scope.ServiceProvider.GetRequiredService<DbSeeder>();
+                dbSeeder.InitData();
+            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
