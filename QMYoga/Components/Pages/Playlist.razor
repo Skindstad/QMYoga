@@ -9,12 +9,78 @@
 
 <SearchBar DefaultSelectedTags=@SearchTags/>
 
+<div id="modal-0" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="ModalLabel">Tilføj ny playlist</h1>
+                <span class="close" @onclick="(() => CloseModal(0))">&times;</span>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div>
+                        <input type="text" class="form-control" placeholder="Navn på playlisten" />
+                    </div>
+                    <br />
+                    <div>
+                        <textarea class="form-control" placeholder="Beskrivelse på playlisten"></textarea>
+                    </div>
+                    <br />
+                    <div>
+                        <input class="form-control form-control-lg" id="formFileLg" type="file">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Gem</button>
+                </div>
+            </form>
+        </div>
+</div>
+
+<button id="myBtn" @onclick="(() => OpenModal(0))">Tilføj ny playlist</button>
+
 @foreach (var playlist in _Playlists)
 {
     <div class="split" style="margin-top: 1em;">
         <div class="container">
             <div>
                 <p class="section-title">Ny</p>
+            </div>
+            <div>
+                <div id="modal-@playlist.Id" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Rediger på playlist</h1>
+                            <span class="close" @onclick="(() => CloseModal(playlist.Id))">&times;</span>
+                        </div>
+                        <form>
+                            <div class="modal-body">
+                                <div>
+                                    <input type="text" class="form-control" placeholder="Navn på playlisten" value="@playlist.Name" />
+                                </div>
+                                <br />
+                                <div>
+                                    <textarea class="form-control" placeholder="Beskrivelse på playlisten">@playlist.Description</textarea>
+                                </div>
+                                <br />
+                                <div>
+                                    <input class="form-control form-control-lg" id="formFileLg" type="file">
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <div class="col">
+                                    <button type="button" class="btn btn-primary">Gem</button>
+                                </div>
+                                <div class="col">
+                                    <button type="button" class="btn ">Slet</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <button @onclick="(() => OpenModal(playlist.Id))">Open Modal for Playlist @playlist.Id</button>
             </div>
             <div class="row align-items-center">
                 
@@ -101,6 +167,18 @@
 
     public List<Models.Playlist> _Playlists { get; set; }
 
+    private async Task OpenModal(int id)
+    {
+        string modalId = $"modal-{id}";
+        await JSRuntime.InvokeVoidAsync("modalFunctions.openModal", modalId);
+        await JSRuntime.InvokeVoidAsync("modalFunctions.setupCloseOnOutsideClick", modalId);
+    }
+
+    private async Task CloseModal(int id)
+    {
+        string modalId = $"modal-{id}";
+        await JSRuntime.InvokeVoidAsync("modalFunctions.closeModal", modalId);
+    }
 
     protected override void OnInitialized()
     {
