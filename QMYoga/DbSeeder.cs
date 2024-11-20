@@ -54,39 +54,35 @@ public class DbSeeder
                       SubCategories = [
                           new SubCategory
                           {
-                              Title = "Nakke",
+                              Title = "Blid Hatha",
                               Url = "nakke",
-                              ImagePath = "images/nakke.jpg"
+                              ImagePath = "images/category/blid_hatha.jpg"
                           },
                       new SubCategory
                       {
-                          Title = "Hjerte",
+                          Title = "Dynamisk Hatha",
                           Url = "hjerte",
-                          ImagePath = "images/hjerte.png"
+                          ImagePath = "images/category/dynamisk_hatha.jpg"
                       },
                       new SubCategory
                       {
-                          Title = "Ryg",
+                          Title = "Yin yoga",
                           Url = "ryg",
-                          ImagePath = "images/ryg.jpg"
-                      }]
-            },
-            new Category
-            {
-                Title = "Andet",
-                SubCategories = [
-                    new SubCategory
-                    {
-                        Title = "Meditation",
-                        Url = "meditation",
-                        ImagePath = "images/meditation.webp"
-                    },
-                    new SubCategory
-                    {
-                        Title = "Åndedræt",
-                        Url = "åndedræt",
-                        ImagePath = "images/åndedræt.jpg"
-                    }]
+                          ImagePath = "images/category/yin.jpg"
+                      },
+                      new SubCategory
+                      {
+                          Title = "Meditation og Afspænding",
+                          Url = "hjerte",
+                          ImagePath = "images/category/meditation.jpg"
+                      },
+                      new SubCategory
+                      {
+                          Title = "Åndedrætsteknik",
+                          Url = "hjerte",
+                          ImagePath = "images/category/åndedræt.jpg"
+                      }
+                      ]
             }
         ];
 
