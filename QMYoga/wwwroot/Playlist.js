@@ -9,4 +9,29 @@
         left: scrollAmount,
     behavior: 'smooth'
             });
+    }
+
+window.modalFunctions = {
+    openModal: function (modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = "block";
         }
+    },
+    closeModal: function (modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = "none";
+        }
+    },
+    setupCloseOnOutsideClick: function (modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            window.onclick = function (event) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            };
+        }
+    }
+};

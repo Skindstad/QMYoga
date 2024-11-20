@@ -7,14 +7,92 @@
 @using Microsoft.EntityFrameworkCore
 <link href="PlaylistStyle.css" rel="stylesheet" />
 
+<div class="row">
+<div class="col">
 <SearchBar DefaultSelectedTags=@SearchTags/>
+</div>
+<div class="col">
+        <div id="modal-0" class="modal">
+            <div class="modal-content" style="background-color: #D1DBD6;">
+            <div class="modal-header">
+                <h1 class="modal-title" id="ModalLabel">Tilføj ny playlist</h1>
+                <span class="close" @onclick="(() => CloseModal(0))">&times;</span>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div>
+                        <input type="text" class="form-control" placeholder="Navn på playlisten" />
+                    </div>
+                    <br />
+                    <div>
+                        <textarea class="form-control" placeholder="Beskrivelse på playlisten"></textarea>
+                    </div>
+                    <br />
+                    <div>
+                        <input class="form-control form-control-lg" id="formFileLg" type="file">
+                    </div>
+
+                </div>
+                <div style="text-align: center;">
+                        <button type="button" class="btn" style="background-color: #2F4D4B; color: white;">Gem</button>
+                </div>
+            </form>
+        </div>
+</div>
+<button class="btn" style="float: right; background-color: #2F4D4B;color: white;" id="myBtn" @onclick="(() => OpenModal(0))">Tilføj ny playlist</button>
+    </div>
+</div>
 
 @foreach (var playlist in _Playlists)
 {
     <div class="split" style="margin-top: 1em;">
         <div class="container">
-            <div>
+            <div class="row">
+            <div class="col">
                 <p class="section-title">Ny</p>
+            </div>
+            <div class="col">
+                <div id="modal-@playlist.Id" class="modal">
+                        <div class="modal-content" style="background-color: #D1DBD6;">
+                        <div class="modal-header">
+                            <h1 class="modal-title">Rediger på playlist</h1>
+                            <span class="close" @onclick="(() => CloseModal(playlist.Id))">&times;</span>
+                        </div>
+                        <form>
+                            <div class="modal-body">
+                                <div>
+                                    <input type="text" class="form-control" placeholder="Navn på playlisten" value="@playlist.Name" />
+                                </div>
+                                <br />
+                                <div>
+                                    <textarea class="form-control" placeholder="Beskrivelse på playlisten">@playlist.Description</textarea>
+                                </div>
+                                <br />
+                                <div>
+                                    <input class="form-control form-control-lg" id="formFileLg" type="file">
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <div class="col">
+                                        <button type="button" class="btn" style="background-color: #2F4D4B; color: white;">Gem</button>
+                                </div>
+                                <div class="col">
+                                        <button type="button" class="btn" style="float: right; background-color: #8C5A74; color: white;">Slet</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                    <button class="btn" style="float: right; background-color: #2F4D4B; color: white;" @onclick="(() => OpenModal(playlist.Id))">
+                        <svg width="30" height="15" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="5" cy="7.5" r="2.5" fill="white" />
+                            <circle cx="15" cy="7.5" r="2.5" fill="white" />
+                            <circle cx="25" cy="7.5" r="2.5" fill="white" />
+                        </svg>
+                    </button>
+            </div>
             </div>
             <div class="row align-items-center">
                 
@@ -75,8 +153,19 @@
             </div>
 
             <!-- Toggle Button -->
+            <div class="row">
+            <div class="col">
             <div class="text-center mt-4">
                 <button class="btn btn-toggle" @onclick="() => ToggleContent(playlist.Id)">Show</button>
+            </div>
+            </div>
+            <div class="col-2">
+                    <div class="mt-4">
+                        <button class="btn" style="float: right; background-color: #2F4D4B; color: white;" onclick="window.location.href='#'">
+                            Tilføj Mediefil
+                        </button>
+                    </div>
+            </div>
             </div>
         </div>
     </div>
@@ -101,6 +190,18 @@
 
     public List<Models.Playlist> _Playlists { get; set; }
 
+    private async Task OpenModal(int id)
+    {
+        string modalId = $"modal-{id}";
+        await JSRuntime.InvokeVoidAsync("modalFunctions.openModal", modalId);
+        await JSRuntime.InvokeVoidAsync("modalFunctions.setupCloseOnOutsideClick", modalId);
+    }
+
+    private async Task CloseModal(int id)
+    {
+        string modalId = $"modal-{id}";
+        await JSRuntime.InvokeVoidAsync("modalFunctions.closeModal", modalId);
+    }
 
     protected override void OnInitialized()
     {
