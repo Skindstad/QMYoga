@@ -1,6 +1,7 @@
 ﻿@page "/Playlist"
 @rendermode InteractiveServer
 @inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
 @using QMYoga.Models
 @using QMYoga.Context
 @using Microsoft.AspNetCore.Components
@@ -162,7 +163,7 @@
             </div>
             <div class="col-2">
                     <div class="mt-4">
-                        <button class="btn" style="float: right; background-color: #2F4D4B; color: white;" onclick="window.location.href='#'">
+                        <button class="btn" style="float: right; background-color: #2F4D4B; color: white;" @onclick="() => CreateNewVideo(playlist.Id)">
                             Tilføj Mediefil
                         </button>
                     </div>
@@ -317,5 +318,10 @@
                 .Where(x => SearchTags.All(tag => x.Tags.Any(t => t.Name == tag.Name)))
                 .ToList();
         }
+    }
+
+    public void CreateNewVideo(int playlistId)
+    {
+        NavigationManager.NavigateTo("/videoplayer?playlistid=" + playlistId + "&create=true");
     }
 }
