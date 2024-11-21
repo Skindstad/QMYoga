@@ -18,14 +18,15 @@
                 <h1 class="modal-title" id="ModalLabel">Tilføj ny playlist</h1>
                 <span class="close" @onclick="(() => CloseModal(0))">&times;</span>
             </div>
-            <form>
+            <EditForm Model="@FromData" OnValidSubmit="@HandleValidSubmit">
                 <div class="modal-body">
                     <div>
-                        <input type="text" class="form-control" placeholder="Navn på playlisten" />
+                            <InputText class="form-control" @bind-Value="FromData.Name" placeholder="Navn på playlisten" />
                     </div>
                     <br />
                     <div>
-                        <textarea class="form-control" placeholder="Beskrivelse på playlisten"></textarea>
+                            @* <label for="description">Beskrivelse:</label> *@
+                            <textarea class="form-control" id="description" @bind="FromData.Description" rows="5" placeholder="Beskrivelse på playlisten"></textarea>
                     </div>
                     <br />
                     <div>
@@ -34,9 +35,9 @@
 
                 </div>
                 <div style="text-align: center;">
-                        <button type="button" class="btn" style="background-color: #2F4D4B; color: white;">Gem</button>
+                        <input type="submit" class="btn" style="background-color: #2F4D4B; color: white;" value="Gem" @onclick="(() => CloseModal(0))" />
                 </div>
-            </form>
+                </EditForm>
         </div>
 </div>
 <button class="btn" style="float: right; background-color: #2F4D4B;color: white;" id="myBtn" @onclick="(() => OpenModal(0))">Tilføj ny playlist</button>
@@ -58,14 +59,14 @@
                             <h1 class="modal-title">Rediger på playlist</h1>
                             <span class="close" @onclick="(() => CloseModal(playlist.Id))">&times;</span>
                         </div>
-                        <form>
+                            <EditForm Model="@playlist" OnValidSubmit="() => SaveChanges(playlist)">
                             <div class="modal-body">
                                 <div>
-                                    <input type="text" class="form-control" placeholder="Navn på playlisten" value="@playlist.Name" />
+                                    <input type="text" class="form-control" placeholder="Navn på playlisten" @bind="@playlist.Name" />
                                 </div>
                                 <br />
                                 <div>
-                                    <textarea class="form-control" placeholder="Beskrivelse på playlisten">@playlist.Description</textarea>
+                                        <textarea class="form-control" id="description" @bind="playlist.Description" rows="5" placeholder="Beskrivelse på playlisten"></textarea>
                                 </div>
                                 <br />
                                 <div>
@@ -75,13 +76,13 @@
                             </div>
                             <div class="modal-footer">
                                 <div class="col">
-                                        <button type="button" class="btn" style="background-color: #2F4D4B; color: white;">Gem</button>
+                                        <input type="submit" class="btn" style="background-color: #2F4D4B; color: white;" value="Gem" @onclick="(() => CloseModal(playlist.Id))">
                                 </div>
                                 <div class="col">
-                                        <button type="button" class="btn" style="float: right; background-color: #8C5A74; color: white;">Slet</button>
+                                        <button type="button" class="btn" style="float: right; background-color: #8C5A74; color: white;" @onclick="(()=> Delete(playlist.Id))">Slet</button>
                                 </div>
                             </div>
-                        </form>
+                        </EditForm>
                     </div>
                 </div>
 
@@ -190,8 +191,63 @@
 
     public List<Models.Playlist> _Playlists { get; set; }
 
+    private Models.Playlist FromData = new Models.Playlist();
+
+    private void HandleValidSubmit()
+    {
+        SubCategory sub = Context.SubCategories.Find(SubCategoryId);
+
+
+        Models.Playlist playlist = new Models.Playlist();
+        playlist.Name = FromData.Name;
+        playlist.Description = FromData.Description;
+        playlist.SubCategory = sub;
+        playlist.Date = DateTime.Now;
+        playlist.Image = "C:/";
+
+        Context.Add(playlist);
+        Context.SaveChanges();
+
+        OnInitialized();
+
+        Console.WriteLine($"Form Submitted: {FromData.Name}, {FromData.Description}");
+        // Add logic for saving data or calling an API here
+
+    }
+    private void SaveChanges(Models.Playlist playlist)
+    {
+        SubCategory sub = Context.SubCategories.Find(SubCategoryId);
+        //Models.Playlist check = Context.Playlists.Find(playlist.Id);
+        Context.Update(playlist);
+        Context.SaveChanges();
+
+        OnInitialized();
+
+
+        // Add logic for saving data or calling an API here
+
+    }
+    private async void Delete(int id)
+    {
+        //SubCategory sub = Context.SubCategories.Find(SubCategoryId);
+        Models.Playlist playlist = Context.Playlists.Find(id);
+        //Context.Update(playlist);
+
+        Context.Remove(playlist);
+
+        Context.SaveChanges();
+
+        OnInitialized();
+
+       await CloseModal(id);
+
+        // Add logic for saving data or calling an API here
+
+    }
+
     private async Task OpenModal(int id)
     {
+        FromData = new();
         string modalId = $"modal-{id}";
         await JSRuntime.InvokeVoidAsync("modalFunctions.openModal", modalId);
         await JSRuntime.InvokeVoidAsync("modalFunctions.setupCloseOnOutsideClick", modalId);
@@ -205,6 +261,7 @@
 
     protected override void OnInitialized()
     {
+        Context.ChangeTracker.Clear();
         _Playlists = Context.Playlists
             .Include(x => x.Videos)
             .ThenInclude(x => x.Tags)
