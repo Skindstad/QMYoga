@@ -22,6 +22,8 @@ namespace QMYoga.Components.SearchBar
         public bool TagListVisible { get; set; }
         public Action? OnChanged { get; set; }
 
+        
+
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
@@ -99,5 +101,6 @@ namespace QMYoga.Components.SearchBar
         {
             return SelectedTags.Contains(tag);
         }
+
     }
 }
