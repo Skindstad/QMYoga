@@ -67,6 +67,7 @@ namespace QMYoga.Components.Pages.VideoPlayer
         public void BackToPlaylists()
         {
             NavigationManager.NavigateTo("/Playlist?subcategory=" + Playlist.SubCategory.Id, true);
+            
         }
     }
 
