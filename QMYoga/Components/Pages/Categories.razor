@@ -1,28 +1,79 @@
 @page "/categories"
+@rendermode InteractiveServer
 
 <SearchBar/>
+<button @onclick="OpenModal">Tilføj ny Kategori</button>
 <div class="category-container">
     @foreach (var cat in _Categories)
     {
         <div class="category">
             <span class="category-title">@cat.Title</span>
             <div class="subcategory-nav">
-                <button class="prev" onclick="prev(this)">🠈</button>
+                <!--<button class="prev" onclick="prev(this)">🠈</button>-->
                 <div class="subcategory-container">
-                    <ul class="subcategory-list">
+                    <div class="subcategory-list">
                         @foreach (var sub in cat.SubCategories)
                         {
-                            <a class="subcategory-link" href="Playlist?subcategory=@sub.Id">
-                                <div class="subcategory">
-                                    <span class="subcategory-title">@sub.Title</span>
-                                    <img class="subcategory-image" src="@sub.ImagePath" />
-                                </div>
-                            </a>
+                            <div class="subcategory-item">
+                                <!--Replace the onclick event for a diffrent window of Modal to show the info of the chosen sub-->
+                                <button class="test-button" @onclick="OpenModal">this is a test button</button> 
+                                <a class="subcategory-link" href="Playlist?subcategory=@sub.Id">
+                                    <div class="subcategory">
+                                        <span class="subcategory-title">@sub.Title</span>
+                                        <img class="subcategory-image" src="@sub.ImagePath" />
+                                    </div>
+                                </a>
+                            </div>
                         }
-                    </ul>
+                    </div>
                 </div>
-                <button class="next" onclick="next(this)">🠊</button>
+                <!--<button class="next" onclick="next(this)">🠊</button>-->
             </div>
         </div>
     }
 </div>
+
+<!-- Modal HTML -->
+@if (IsModalOpen)
+{
+    <div tabindex="-1" style="display: block;" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tilføj Kategori</h5>
+                    <button type="button" class="btn btn-secondary" @onclick="CloseModal">Close</button>
+                </div>
+                <div class="modal-body"> 
+                    <input />
+                    <br />
+                    <select style="margin-top:20px;">
+                        <option>Vælg en kategori</option>
+                    </select>
+                    <br />
+                    <input style="margin-right:" />
+                    <button style="margin-right:10px;">Tilføj Billede</button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CloseModal" style="margin-left:auto; margin-right:auto;">Gem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@code {
+    private bool IsModalOpen = false; 
+
+    private void OpenModal()
+    {
+        IsModalOpen = true;
+    }
+
+    private void CloseModal()
+    {
+        IsModalOpen = false;
+    }
+}
+
