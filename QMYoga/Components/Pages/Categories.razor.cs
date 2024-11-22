@@ -12,10 +12,17 @@ namespace QMYoga.Components.Pages
 
         public List<Category> _Categories { get; set; }
 
+        private SubCategory selectedSubCategori;
+
         protected override void OnInitialized()
         {
             _Categories = Context.Categories.Include(static c => c.SubCategories).ToList();
         }
-    }
 
+        private void UploadImage()
+        {
+
+        }
+
+    }
 }
