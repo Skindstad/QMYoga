@@ -13,18 +13,26 @@
                 <div class="subcategory-container">
                     <div class="subcategory-list">
                         @foreach (Models.SubCategory sub in cat.SubCategories)
-                        {
-                            <div class="subcategory-item">
-                                <!--Shows the info of the chosen sub-->
+                            {
+                                <div class="subcategory-item">
+                                    <!--Shows the info of the chosen sub-->
 
-                                <button class="test-button" @onclick="() => SubKatagoriStage(sub)">this is a test button</button>
-                                <a class="subcategory-link" href="Playlist?subcategory=@sub.Id">
                                     <div class="subcategory">
                                         <span class="subcategory-title">@sub.Title</span>
-                                        <img class="subcategory-image" src="@sub.ImagePath" />
+                                        <div class="c">
+                                            <button class="test-button" @onclick="() => SubKatagoriStage(sub)">
+                                                <svg width="30" height="15" xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="5" cy="7.5" r="2.5" fill="white" />
+                                                    <circle cx="15" cy="7.5" r="2.5" fill="white" />
+                                                    <circle cx="25" cy="7.5" r="2.5" fill="white" />
+                                                </svg>
+                                            </button>
+                                            <a class="subcategory-link" href="Playlist?subcategory=@sub.Id">
+                                                <img class="subcategory-image" src="@sub.ImagePath" />
+                                            </a>
+                                        </div>
                                     </div>
-                                </a>
-                            </div>
+                                </div>
                         }
                     </div>
                 </div>
@@ -32,7 +40,6 @@
             </div>
         </div>
     }
-</div>
 
 <!-- Modal HTML -->
 @if (IsModalOpen)
@@ -64,7 +71,7 @@
 
 @if (isSubKatagoriModalOpen)
 {
-    <div tabindex="-1" style="display: block;" role="dialog">
+    <div class="dialog" tabindex="-1" style="display: block;" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -76,11 +83,6 @@
                      <label for="titleInput">Title</label>
                     <input id="titleInput" class="form-control"
                            @bind="@selectedSubCategori.Title" />
-
-                    <!-- Url -->
-                    <label for="urlInput" style="margin-top: 20px;">Url</label>
-                    <input id="urlInput" class="form-control"
-                           @bind="@selectedSubCategori.Url" />
 
                     <!-- ImagePath -->
                     <label for="imagePathInput" style="margin-top: 20px;">Image Path</label>
@@ -109,6 +111,7 @@
         </div>
     </div>
 }
+</div>
 
 
 @code {
@@ -118,14 +121,15 @@
 
     private void SubKatagoriStage(Models.SubCategory cata)
     {
-        selectedSubCategori = cata;
-        if (isSubKatagoriModalOpen)
+        if(selectedSubCategori == cata)
         {
-            // if its open
+            // if its open, close it
+            selectedSubCategori = null;
             isSubKatagoriModalOpen = false;
         }
         else
         {
+            selectedSubCategori = cata;
             isSubKatagoriModalOpen = true;
         }
     }
@@ -134,7 +138,7 @@
     {
         Context.Update(selectedSubCategori);
         Context.SaveChanges();
-        CloseModal();
+        isSubKatagoriModalOpen = false;
     }
 
     private void OpenModal()
