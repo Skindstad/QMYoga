@@ -1,6 +1,7 @@
 ﻿@page "/Playlist"
 @rendermode InteractiveServer
 @inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
 @using QMYoga.Models
 @using QMYoga.Context
 @using Microsoft.AspNetCore.Components
@@ -99,20 +100,24 @@
                 
                 <div class="col-6 col-md-4 col-lg-3 position-relative image-overlay-container">
                 <a href="videoplayer?playlistid=@playlist.Id">
-                    <img src="https://www.ekhartyoga.com/media/image/articles/Laia_Bove_Mermaid-pose.jpg" alt="image" class="img-thumbnail base-image">
-                    <img src="https://img.freepik.com/premium-vector/free-vector-padlock-icon-lock-locked_901408-572.jpg" alt="lock" class="img-thumbnail overlay-image">
+                    <img src="@playlist.Image" alt="image" class="img-thumbnail base-image">
+                    <!--<img src="https://img.freepik.com/premium-vector/free-vector-padlock-icon-lock-locked_901408-572.jpg" alt="lock" class="img-thumbnail overlay-image">-->
                 </a>
                 </div>
 
                 <div class="col">
-                    <div class="row">
+                    <div class="title-container">
                         <h1 class="playlist-title">@playlist.Name</h1>
+                        <span class="duration">@(playlist.Videos.Sum(video => video.Duration.Minutes)) min</span>
+                        @if (playlist.Videos.Count > 1) {
+                            <span class="video-count">@(playlist.Videos.Count) videoer</span>
+                        }
                     </div>
-                    <div class="row button-group">
+                    <div class="tags">
                         @foreach (var tag in playlist.Tags)
                         {
-                            <div class="col-6 col-sm-6 col-md-3 mb-2">
-                                <button class="btn btn-custom">@tag.Name</button>
+                            <div class="tag">
+                                <span class="name">@tag.Name</span>
                             </div>
                         }
                     </div>
@@ -157,12 +162,14 @@
             <div class="row">
             <div class="col">
             <div class="text-center mt-4">
-                <button class="btn btn-toggle" @onclick="() => ToggleContent(playlist.Id)">Show</button>
+                @if (playlist.Videos.Count > 1) {
+                    <button class="btn btn-toggle" @onclick="() => ToggleContent(playlist.Id)">Show</button>
+                }
             </div>
             </div>
             <div class="col-2">
                     <div class="mt-4">
-                        <button class="btn" style="float: right; background-color: #2F4D4B; color: white;" onclick="window.location.href='#'">
+                        <button class="btn" style="float: right; background-color: #2F4D4B; color: white;" @onclick="() => CreateNewVideo(playlist.Id)">
                             Tilføj Mediefil
                         </button>
                     </div>
@@ -266,6 +273,7 @@
             .Include(x => x.Videos)
             .ThenInclude(x => x.Tags)
             .Include(x => x.SubCategory)
+            .OrderByDescending(x => x.Videos.Max(y => y.UploadDate))
             .ToList();
 
         foreach (var pl in _Playlists)
@@ -317,5 +325,10 @@
                 .Where(x => SearchTags.All(tag => x.Tags.Any(t => t.Name == tag.Name)))
                 .ToList();
         }
+    }
+
+    public void CreateNewVideo(int playlistId)
+    {
+        NavigationManager.NavigateTo("/videoplayer?playlistid=" + playlistId + "&create=true");
     }
 }
