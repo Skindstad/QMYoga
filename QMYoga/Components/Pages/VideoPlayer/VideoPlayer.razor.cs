@@ -123,7 +123,7 @@ namespace QMYoga.Components.Pages.VideoPlayer
                 Video = new()
                 {
                     Thumbnail = "images/YogaLogo.png",
-                    PlayList = Playlist,
+                    PlayLists = [Playlist],
                 };
 
                 return;
@@ -264,7 +264,7 @@ namespace QMYoga.Components.Pages.VideoPlayer
         public void BackToPlaylists()
         {
             NavigationManager.NavigateTo("/Playlist?subcategory=" + Playlist.SubCategory.Id, true);
-            
+
         }
 
         public async Task TriggerFileInput(string querySelector)

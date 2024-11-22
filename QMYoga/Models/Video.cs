@@ -28,7 +28,7 @@ namespace QMYoga.Models
         [Required]
         public DateTime UploadDate { get; set; } // The date the video was uploaded
 
-        public Playlist? PlayList { get; set; }
+        public ICollection<Playlist> PlayLists { get; set; } = new List<Playlist>();
         public ICollection<Tag> Tags { get; set; } = new List<Tag>();
     }
 }

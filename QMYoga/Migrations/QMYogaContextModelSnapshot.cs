@@ -22,6 +22,21 @@ namespace QMYoga.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("PlaylistVideo", b =>
+                {
+                    b.Property<int>("PlayListsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VideosId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PlayListsId", "VideosId");
+
+                    b.HasIndex("VideosId");
+
+                    b.ToTable("PlaylistVideo");
+                });
+
             modelBuilder.Entity("QMYoga.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -155,9 +170,6 @@ namespace QMYoga.Migrations
                     b.Property<TimeSpan>("Duration")
                         .HasColumnType("time");
 
-                    b.Property<int?>("PlayListId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Thumbnail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -176,8 +188,6 @@ namespace QMYoga.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PlayListId");
-
                     b.ToTable("Videos");
                 });
 
@@ -194,6 +204,21 @@ namespace QMYoga.Migrations
                     b.HasIndex("VideosId");
 
                     b.ToTable("TagVideo");
+                });
+
+            modelBuilder.Entity("PlaylistVideo", b =>
+                {
+                    b.HasOne("QMYoga.Models.Playlist", null)
+                        .WithMany()
+                        .HasForeignKey("PlayListsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QMYoga.Models.Video", null)
+                        .WithMany()
+                        .HasForeignKey("VideosId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("QMYoga.Models.Playlist", b =>
@@ -218,15 +243,6 @@ namespace QMYoga.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("QMYoga.Models.Video", b =>
-                {
-                    b.HasOne("QMYoga.Models.Playlist", "PlayList")
-                        .WithMany("Videos")
-                        .HasForeignKey("PlayListId");
-
-                    b.Navigation("PlayList");
-                });
-
             modelBuilder.Entity("TagVideo", b =>
                 {
                     b.HasOne("QMYoga.Models.Tag", null)
@@ -245,11 +261,6 @@ namespace QMYoga.Migrations
             modelBuilder.Entity("QMYoga.Models.Category", b =>
                 {
                     b.Navigation("SubCategories");
-                });
-
-            modelBuilder.Entity("QMYoga.Models.Playlist", b =>
-                {
-                    b.Navigation("Videos");
                 });
 
             modelBuilder.Entity("QMYoga.Models.SubCategory", b =>
