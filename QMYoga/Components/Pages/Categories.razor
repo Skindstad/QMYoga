@@ -12,11 +12,12 @@
                 <!--<button class="prev" onclick="prev(this)">🠈</button>-->
                 <div class="subcategory-container">
                     <div class="subcategory-list">
-                        @foreach (var sub in cat.SubCategories)
+                        @foreach (Models.SubCategory sub in cat.SubCategories)
                         {
                             <div class="subcategory-item">
-                                <!--Replace the onclick event for a diffrent window of Modal to show the info of the chosen sub-->
-                                <button class="test-button" @onclick="OpenModal">this is a test button</button> 
+                                <!--Shows the info of the chosen sub-->
+
+                                <button class="test-button" @onclick="() => SubKatagoriStage(sub)">this is a test button</button>
                                 <a class="subcategory-link" href="Playlist?subcategory=@sub.Id">
                                     <div class="subcategory">
                                         <span class="subcategory-title">@sub.Title</span>
@@ -61,10 +62,80 @@
     </div>
 }
 
+@if (isSubKatagoriModalOpen)
+{
+    <div tabindex="-1" style="display: block;" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit SubCategory</h5>
+                    <button type="button" class="btn btn-secondary" @onclick="CloseModal">Close</button>
+                </div>
+                <div class="modal-body">
+                    <!-- Title -->
+                     <label for="titleInput">Title</label>
+                    <input id="titleInput" class="form-control"
+                           @bind="@selectedSubCategori.Title" />
+
+                    <!-- Url -->
+                    <label for="urlInput" style="margin-top: 20px;">Url</label>
+                    <input id="urlInput" class="form-control"
+                           @bind="@selectedSubCategori.Url" />
+
+                    <!-- ImagePath -->
+                    <label for="imagePathInput" style="margin-top: 20px;">Image Path</label>
+                    <input id="imagePathInput" class="form-control"
+                           @bind="@selectedSubCategori.ImagePath" />
+
+                    <!-- Playlists -->
+                    <label for="playlistsInput" style="margin-top: 20px;">Playlists</label>
+                    @for (int i = 0; i < selectedSubCategori.Playlists.Count; i++)
+                    {
+                        <input id="playlistsInput_@i" class="form-control"
+                               @bind="selectedSubCategori.Playlists.ToList()[i]" />
+                    }
+                    <br />
+                    <!-- Optional: Image Upload -->
+                    <button type="button" class="btn btn-primary" style="margin-top: 20px;" @onclick="UploadImage">
+                        Upload Image - does nothing now
+                    </button> 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="SaveData" style="margin-left:auto; margin-right:auto;">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 
 @code {
-    private bool IsModalOpen = false; 
+    private bool IsModalOpen = false;
+
+    private bool isSubKatagoriModalOpen = false;
+
+    private void SubKatagoriStage(Models.SubCategory cata)
+    {
+        selectedSubCategori = cata;
+        if (isSubKatagoriModalOpen)
+        {
+            // if its open
+            isSubKatagoriModalOpen = false;
+        }
+        else
+        {
+            isSubKatagoriModalOpen = true;
+        }
+    }
+
+    private void SaveData()
+    {
+        Context.Update(selectedSubCategori);
+        Context.SaveChanges();
+        CloseModal();
+    }
 
     private void OpenModal()
     {
