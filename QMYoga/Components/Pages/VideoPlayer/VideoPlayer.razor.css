@@ -1,0 +1,245 @@
+.container {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 1rem;
+    position: relative;
+    margin: auto;
+    flex: 1;
+}
+
+video {
+    background: black;
+}
+
+.outer-container {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 1rem;
+}
+
+.left-container {
+    width: 10rem;
+}
+
+.right-container {
+    width: 10rem;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 1rem;
+}
+
+.right-container > button {
+    padding: 0.5rem;
+}
+
+.bottom-container {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
+
+.bottom-container > button {
+    padding: 0.5rem 1rem;
+    min-width: 10rem;
+}
+
+.description-input {
+    resize: none;
+    width: 100%;
+    height: 5rem;
+}
+
+.description {
+    min-height: 7rem;
+}
+
+.back-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+.title,
+.title-input {
+    font-size: 2rem;
+}
+
+.video-container {
+    width: 100%;
+    position: relative;
+}
+
+.title-input {
+    width: 100%;
+}
+
+.toggle-video-button {
+    position: absolute;
+    z-index: 1000;
+    padding: 0.25rem 1rem;
+    right: 0;
+    margin: 0.5rem;
+}
+
+.video {
+    width: 100%;
+    display: none;
+    aspect-ratio: 16 / 9;
+}
+
+.thumbnail-container {
+    width: 100%;
+    display: none;
+    aspect-ratio: 16 / 9;
+    position: relative;
+    border: 0.1rem solid black;
+    cursor: pointer;
+}
+
+.play-symbol {
+    height: 30%;
+    position: absolute;
+    aspect-ratio: 1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.playlist-link {
+    text-decoration: none;
+    color: black;
+}
+
+.thumbnail {
+    width: 100%;
+    height: 100%;
+}
+
+.active {
+    display: block;
+}
+
+.header {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 1rem;
+}
+
+.new {
+    display: inline-flex;
+    align-items: center;
+    color: yellow;
+    text-shadow: 0 0 5px black;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.spacer {
+    flex: 1;
+}
+
+.tags {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 0.5rem;
+    min-height: 3rem;
+    align-items: flex-start;
+}
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: lightgrey;
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.playlist {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.playlist-prev,
+.playlist-next {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 0.5rem;
+}
+
+.next-arrow,
+.prev-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+}
+
+.playlist img {
+    width: 4rem;
+    height: 4rem;
+    background: green;
+}
+
+.tags-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+}
+
+.dialog-content {
+    background: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    gap: 1rem;
+    width: 30rem;
+}
+
+.dialog-title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.dialog-tags {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 1rem;
+}
+
+.dialog-new-tag {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 1rem;
+}
+
+.dialog-new-tag > input {
+    flex: 1;
+}
+
+.dialog-new-tag > * {
+    padding: 0.5rem 1rem;
+}
+
+.dialog-button-container {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+}
+
+.dialog-button-container > button {
+    padding: 0.5rem 1rem;
+    min-width: 7rem;
+}

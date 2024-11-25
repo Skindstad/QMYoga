@@ -1,0 +1,334 @@
+﻿@page "/Playlist"
+@rendermode InteractiveServer
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+@using QMYoga.Models
+@using QMYoga.Context
+@using Microsoft.AspNetCore.Components
+@using Microsoft.EntityFrameworkCore
+<link href="PlaylistStyle.css" rel="stylesheet" />
+
+<div class="row">
+<div class="col">
+<SearchBar DefaultSelectedTags=@SearchTags/>
+</div>
+<div class="col">
+        <div id="modal-0" class="modal">
+            <div class="modal-content" style="background-color: #D1DBD6;">
+            <div class="modal-header">
+                <h1 class="modal-title" id="ModalLabel">Tilføj ny playlist</h1>
+                <span class="close" @onclick="(() => CloseModal(0))">&times;</span>
+            </div>
+            <EditForm Model="@FromData" OnValidSubmit="@HandleValidSubmit">
+                <div class="modal-body">
+                    <div>
+                            <InputText class="form-control" @bind-Value="FromData.Name" placeholder="Navn på playlisten" />
+                    </div>
+                    <br />
+                    <div>
+                            @* <label for="description">Beskrivelse:</label> *@
+                            <textarea class="form-control" id="description" @bind="FromData.Description" rows="5" placeholder="Beskrivelse på playlisten"></textarea>
+                    </div>
+                    <br />
+                    <div>
+                        <input class="form-control form-control-lg" id="formFileLg" type="file">
+                    </div>
+
+                </div>
+                <div style="text-align: center;">
+                        <input type="submit" class="btn" style="background-color: #2F4D4B; color: white;" value="Gem" @onclick="(() => CloseModal(0))" />
+                </div>
+                </EditForm>
+        </div>
+</div>
+<button class="btn" style="float: right; background-color: #2F4D4B;color: white;" id="myBtn" @onclick="(() => OpenModal(0))">Tilføj ny playlist</button>
+    </div>
+</div>
+
+@foreach (var playlist in _Playlists)
+{
+    <div class="split" style="margin-top: 1em;">
+        <div class="container">
+            <div class="row">
+            <div class="col">
+                <p class="section-title">Ny</p>
+            </div>
+            <div class="col">
+                <div id="modal-@playlist.Id" class="modal">
+                        <div class="modal-content" style="background-color: #D1DBD6;">
+                        <div class="modal-header">
+                            <h1 class="modal-title">Rediger på playlist</h1>
+                            <span class="close" @onclick="(() => CloseModal(playlist.Id))">&times;</span>
+                        </div>
+                            <EditForm Model="@playlist" OnValidSubmit="() => SaveChanges(playlist)">
+                            <div class="modal-body">
+                                <div>
+                                    <input type="text" class="form-control" placeholder="Navn på playlisten" @bind="@playlist.Name" />
+                                </div>
+                                <br />
+                                <div>
+                                        <textarea class="form-control" id="description" @bind="playlist.Description" rows="5" placeholder="Beskrivelse på playlisten"></textarea>
+                                </div>
+                                <br />
+                                <div>
+                                    <input class="form-control form-control-lg" id="formFileLg" type="file">
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <div class="col">
+                                        <input type="submit" class="btn" style="background-color: #2F4D4B; color: white;" value="Gem" @onclick="(() => CloseModal(playlist.Id))">
+                                </div>
+                                <div class="col">
+                                        <button type="button" class="btn" style="float: right; background-color: #8C5A74; color: white;" @onclick="(()=> Delete(playlist.Id))">Slet</button>
+                                </div>
+                            </div>
+                        </EditForm>
+                    </div>
+                </div>
+
+                    <button class="btn" style="float: right; background-color: #2F4D4B; color: white;" @onclick="(() => OpenModal(playlist.Id))">
+                        <svg width="30" height="15" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="5" cy="7.5" r="2.5" fill="white" />
+                            <circle cx="15" cy="7.5" r="2.5" fill="white" />
+                            <circle cx="25" cy="7.5" r="2.5" fill="white" />
+                        </svg>
+                    </button>
+            </div>
+            </div>
+            <div class="row align-items-center">
+                
+                <div class="col-6 col-md-4 col-lg-3 position-relative image-overlay-container">
+                <a href="videoplayer?playlistid=@playlist.Id">
+                    <img src="@playlist.Image" alt="image" class="img-thumbnail base-image">
+                    <!--<img src="https://img.freepik.com/premium-vector/free-vector-padlock-icon-lock-locked_901408-572.jpg" alt="lock" class="img-thumbnail overlay-image">-->
+                </a>
+                </div>
+
+                <div class="col">
+                    <div class="title-container">
+                        <h1 class="playlist-title">@playlist.Name</h1>
+                        <span class="duration">@(playlist.Videos.Sum(video => video.Duration.Minutes)) min</span>
+                        @if (playlist.Videos.Count > 1) {
+                            <span class="video-count">@(playlist.Videos.Count) videoer</span>
+                        }
+                    </div>
+                    <div class="tags">
+                        @foreach (var tag in playlist.Tags)
+                        {
+                            <div class="tag">
+                                <span class="name">@tag.Name</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Collapsible Content (Text + Carousel) -->
+            <div class="row" style="@GetDisplayStyle(playlist.IsVisible)">
+                <div class="row">
+                <div class="col-md-4 col-sm-0"></div>
+                <div class="col-md-8 col-sm-12">
+                    <p class="description-text">@playlist.Description</p>
+                </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 position-relative">
+                        <div class="scroll-carousel d-flex" id="carouselContainer@(playlist.Id)">
+                            @foreach (var video in playlist.Videos)
+                            {
+                                <a href="videoplayer?playlistid=@playlist.Id&videoid=@video.Id">
+                                    <div class="carousel-image">
+                                        <img src="@video.Thumbnail" alt="@video.Title">
+                                    </div>
+                                </a>
+                            }
+                        </div>
+
+                        <!-- Carousel Controls -->
+                        <button class="carousel-control-prev" type="button" @onclick="() => ScrollCarousel(-1, playlist.Id)">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" @onclick="() => ScrollCarousel(1, playlist.Id)">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toggle Button -->
+            <div class="row">
+            <div class="col">
+            <div class="text-center mt-4">
+                @if (playlist.Videos.Count > 1) {
+                    <button class="btn btn-toggle" @onclick="() => ToggleContent(playlist.Id)">Show</button>
+                }
+            </div>
+            </div>
+            <div class="col-2">
+                    <div class="mt-4">
+                        <button class="btn" style="float: right; background-color: #2F4D4B; color: white;" @onclick="() => CreateNewVideo(playlist.Id)">
+                            Tilføj Mediefil
+                        </button>
+                    </div>
+            </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "subcategory")]
+    public int? SubCategoryId { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "tags")]
+    public string? SearchTagsString { get; set; }
+
+    private List<Tag> SearchTags {get;set;} = [];
+
+    private bool isContentVisible = false;
+    private string toggleButtonText = "Show";
+
+    [Inject]
+    public QMYogaContext Context { get; set; }
+
+    public List<Models.Playlist> _Playlists { get; set; }
+
+    private Models.Playlist FromData = new Models.Playlist();
+
+    private void HandleValidSubmit()
+    {
+        SubCategory sub = Context.SubCategories.Find(SubCategoryId);
+
+
+        Models.Playlist playlist = new Models.Playlist();
+        playlist.Name = FromData.Name;
+        playlist.Description = FromData.Description;
+        playlist.SubCategory = sub;
+        playlist.Date = DateTime.Now;
+        playlist.Image = "C:/";
+
+        Context.Add(playlist);
+        Context.SaveChanges();
+
+        OnInitialized();
+
+        Console.WriteLine($"Form Submitted: {FromData.Name}, {FromData.Description}");
+        // Add logic for saving data or calling an API here
+
+    }
+    private void SaveChanges(Models.Playlist playlist)
+    {
+        SubCategory sub = Context.SubCategories.Find(SubCategoryId);
+        //Models.Playlist check = Context.Playlists.Find(playlist.Id);
+        Context.Update(playlist);
+        Context.SaveChanges();
+
+        OnInitialized();
+
+
+        // Add logic for saving data or calling an API here
+
+    }
+    private async void Delete(int id)
+    {
+        //SubCategory sub = Context.SubCategories.Find(SubCategoryId);
+        Models.Playlist playlist = Context.Playlists.Find(id);
+        //Context.Update(playlist);
+
+        Context.Remove(playlist);
+
+        Context.SaveChanges();
+
+        OnInitialized();
+
+       await CloseModal(id);
+
+        // Add logic for saving data or calling an API here
+
+    }
+
+    private async Task OpenModal(int id)
+    {
+        FromData = new();
+        string modalId = $"modal-{id}";
+        await JSRuntime.InvokeVoidAsync("modalFunctions.openModal", modalId);
+        await JSRuntime.InvokeVoidAsync("modalFunctions.setupCloseOnOutsideClick", modalId);
+    }
+
+    private async Task CloseModal(int id)
+    {
+        string modalId = $"modal-{id}";
+        await JSRuntime.InvokeVoidAsync("modalFunctions.closeModal", modalId);
+    }
+
+    protected override void OnInitialized()
+    {
+        Context.ChangeTracker.Clear();
+        _Playlists = Context.Playlists
+            .Include(x => x.Videos)
+            .ThenInclude(x => x.Tags)
+            .Include(x => x.SubCategory)
+            .OrderByDescending(x => x.Videos.Max(y => y.UploadDate))
+            .ToList();
+
+        foreach (var pl in _Playlists)
+        {
+            pl.Tags = pl.Videos.SelectMany(x => x.Tags).Distinct().ToList();
+        }
+
+        if (SubCategoryId is not null)
+        {
+            _Playlists = _Playlists
+                .Where(x => x.SubCategory.Id == SubCategoryId)
+                .ToList();
+        }
+
+    }
+
+    private void ToggleContent(int id)
+    {
+        var playlist = _Playlists.FirstOrDefault(s => s.Id == id);
+        if (playlist != null)
+        {
+            playlist.IsVisible = !playlist.IsVisible;
+        }
+    }
+
+    private string GetDisplayStyle(bool isVisible)
+    {
+        return isVisible ? "display: block;" : "display: none;";
+    }
+
+
+    private void ScrollCarousel(int direction, int id)
+    {
+        JSRuntime.InvokeVoidAsync("scrollCarousel", direction, id);
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (SearchTagsString is not null) {
+            SearchTags = SearchTagsString
+                .Split("|||")
+                .Select(text => new Tag{Name = text})
+                .ToList();
+        }
+
+        if (SearchTags.Count != 0)
+        {
+            _Playlists = _Playlists
+                .Where(x => SearchTags.All(tag => x.Tags.Any(t => t.Name == tag.Name)))
+                .ToList();
+        }
+    }
+
+    public void CreateNewVideo(int playlistId)
+    {
+        NavigationManager.NavigateTo("/videoplayer?playlistid=" + playlistId + "&create=true");
+    }
+}
