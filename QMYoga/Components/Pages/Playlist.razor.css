@@ -1,0 +1,28 @@
+.tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #92aa9d;
+    border-radius: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    color: white;
+    font-weight: bold;
+}
+
+.tag:nth-of-type(even) {
+    background: #b595a6;
+}
+
+.tags {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 0.5rem;
+    min-height: 3rem;
+    align-items: flex-start;
+}
+
+.title-container {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 1rem;
+}

@@ -1,0 +1,68 @@
+@rendermode InteractiveServer
+
+<div class="container">
+    <div class="button-container">
+        <button class="select-tags" @onclick="ToggleTagList">Select tags</button>
+        <div class="list @(TagListVisible ? "visible" : "")">
+
+            @foreach (var tag in AllTags) {
+                <div class="list-item @(IsSelected(tag) ? "selected" : "")" @onclick="() => ToggleTag(tag)">
+                    <span>@tag.Name</span>
+                </div>
+            }
+        </div>
+        <button class="search" @onclick="Search">Search</button>
+        <!-- Button to trigger the modal -->
+        @* <button @onclick="OpenModal">Tilføj ny Kategori</button> *@
+    </div>
+    <div class="selected-tags">
+        @foreach (var tag in SelectedTags) {
+            <div class="tag" @onclick="() => RemoveTag(tag)">
+                <span class="cross">X</span>
+                <span>@tag.Name</span>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modal HTML -->
+@if(IsModalOpen)
+{
+    <div tabindex="-1" style="display: block;" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tilføj Kategori</h5>
+                    <button type="button" class="btn btn-secondary" @onclick="CloseModal">Close</button>
+                </div>
+                <div class="modal-body">
+                    <input />
+                    <br />
+                    <select style="margin-top:20px;">
+                        <option>Vælg en kategori</option>
+                    </select> 
+                    <br />
+                    <input style="margin-right:"/> 
+                    <button style="margin-right:10px;">Tilføj Billede</button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CloseModal" style="margin-left:auto; margin-right:auto;">Gem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private bool IsModalOpen = false;
+
+    private void OpenModal()
+    {
+        IsModalOpen = true;
+    }
+
+    private void CloseModal()
+    {
+        IsModalOpen = false;
+    }
+}

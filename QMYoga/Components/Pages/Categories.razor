@@ -1,0 +1,154 @@
+@page "/categories"
+@rendermode InteractiveServer
+
+<SearchBar/>
+<button @onclick="OpenModal">Tilføj ny Kategori</button>
+<div class="category-container">
+    @foreach (var cat in _Categories)
+    {
+        <div class="category">
+            <span class="category-title">@cat.Title</span>
+            <div class="subcategory-nav">
+                <!--<button class="prev" onclick="prev(this)">🠈</button>-->
+                <div class="subcategory-container">
+                    <div class="subcategory-list">
+                        @foreach (Models.SubCategory sub in cat.SubCategories)
+                            {
+                                <div class="subcategory-item">
+                                    <!--Shows the info of the chosen sub-->
+
+                                    <div class="subcategory">
+                                        <span class="subcategory-title">@sub.Title</span>
+                                        <div class="c">
+                                            <button class="test-button" @onclick="() => SubKatagoriStage(sub)">
+                                                <svg width="30" height="15" xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="5" cy="7.5" r="2.5" fill="white" />
+                                                    <circle cx="15" cy="7.5" r="2.5" fill="white" />
+                                                    <circle cx="25" cy="7.5" r="2.5" fill="white" />
+                                                </svg>
+                                            </button>
+                                            <a class="subcategory-link" href="Playlist?subcategory=@sub.Id">
+                                                <img class="subcategory-image" src="@sub.ImagePath" />
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                        }
+                    </div>
+                </div>
+                <!--<button class="next" onclick="next(this)">🠊</button>-->
+            </div>
+        </div>
+    }
+
+<!-- Modal HTML -->
+@if (IsModalOpen)
+{
+    <div tabindex="-1" style="display: block;" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tilføj Kategori</h5>
+                    <button type="button" class="btn btn-secondary" @onclick="CloseModal">Close</button>
+                </div>
+                <div class="modal-body"> 
+                    <input />
+                    <br />
+                    <select style="margin-top:20px;">
+                        <option>Vælg en kategori</option>
+                    </select>
+                    <br />
+                    <input style="margin-right:" />
+                    <button style="margin-right:10px;">Tilføj Billede</button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CloseModal" style="margin-left:auto; margin-right:auto;">Gem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (isSubKatagoriModalOpen)
+{
+    <div class="dialog" tabindex="-1" style="display: block;" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit SubCategory</h5>
+                    <button type="button" class="btn btn-secondary" @onclick="CloseModal">Close</button>
+                </div>
+                <div class="modal-body">
+                    <!-- Title -->
+                     <label for="titleInput">Title</label>
+                    <input id="titleInput" class="form-control"
+                           @bind="@selectedSubCategori.Title" />
+
+                    <!-- ImagePath -->
+                    <label for="imagePathInput" style="margin-top: 20px;">Image Path</label>
+                    <input id="imagePathInput" class="form-control"
+                           @bind="@selectedSubCategori.ImagePath" />
+
+                    <!-- Playlists -->
+                    <label for="playlistsInput" style="margin-top: 20px;">Playlists</label>
+                    @for (int i = 0; i < selectedSubCategori.Playlists.Count; i++)
+                    {
+                        <input id="playlistsInput_@i" class="form-control"
+                               @bind="selectedSubCategori.Playlists.ToList()[i]" />
+                    }
+                    <br />
+                    <!-- Optional: Image Upload -->
+                    <button type="button" class="btn btn-primary" style="margin-top: 20px;" @onclick="UploadImage">
+                        Upload Image - does nothing now
+                    </button> 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="SaveData" style="margin-left:auto; margin-right:auto;">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+</div>
+
+
+@code {
+    private bool IsModalOpen = false;
+
+    private bool isSubKatagoriModalOpen = false;
+
+    private void SubKatagoriStage(Models.SubCategory cata)
+    {
+        if(selectedSubCategori == cata)
+        {
+            // if its open, close it
+            selectedSubCategori = null;
+            isSubKatagoriModalOpen = false;
+        }
+        else
+        {
+            selectedSubCategori = cata;
+            isSubKatagoriModalOpen = true;
+        }
+    }
+
+    private void SaveData()
+    {
+        Context.Update(selectedSubCategori);
+        Context.SaveChanges();
+        isSubKatagoriModalOpen = false;
+    }
+
+    private void OpenModal()
+    {
+        IsModalOpen = true;
+    }
+
+    private void CloseModal()
+    {
+        IsModalOpen = false;
+    }
+}
+
